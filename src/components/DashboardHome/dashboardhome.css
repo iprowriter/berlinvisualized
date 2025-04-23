@@ -1,0 +1,151 @@
+.main {
+    display: grid;
+    grid-template-rows: 7% auto;
+    color: #636060;
+    background-color: rgb(235,236,238);
+    height: 100vh;
+    width: 100vw;
+    margin: 0px;
+  }
+
+.topMenu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    background-color: #fff;
+    border-bottom: 2px solid #d3d3d3;
+    padding: 0px 15px;
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profileContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px; 
+}
+
+.profileIcons {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #D3D3D3;
+    color: white;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.profileIcons:hover {
+    background-color: #0078b4;
+    transform: scale(1.1);
+    box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+    font-size: 1.3rem; 
+    font-weight: bold; 
+    color: #14172e;
+    text-transform: uppercase; 
+    letter-spacing: 2px;
+    font-family: 'Rubik', sans-serif;
+    display: inline-block;
+    padding: 10px 10px;
+  }
+  
+  .logo {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+
+.dashboardArea {
+    display: grid;
+    grid-template-columns: 10% 90%;
+    grid-gap: 10px;
+    color: #636060;
+    background-color: rgb(235,236,238);
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+  }
+  
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    height: 100%;
+    font-size: 1.2rem;
+    color: #fff;
+    background-color: #004687;
+    border-right: 2px solid #fff;
+    width: 100%;
+    transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Collapsed sidebar */
+/* .sidebar.collapsed {
+    width: 40%; 
+} */
+
+.dashboardArea.collapsed {
+    /* width: 40%;  */
+    grid-template-columns: 5% 95%;
+}
+
+
+/* Sidebar icon row animation */
+.sidebarIcons {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+/* Text fade effect when collapsing */
+.sidebarIcons span {
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Hide text smoothly */
+.sidebar.collapsed .sidebarIcons span {
+    opacity: 0; 
+    display: none;
+}
+
+.toggleButton {
+    background: none;
+    border: 1px solid white;
+    color: white;
+    padding: 5px 8px; 
+    font-size: 0.9rem; 
+    cursor: pointer;
+    margin-bottom: 10px;
+    width: 60%;
+    align-self: start; 
+    transition: all 0.3s ease-in-out;
+}
+
+.toggleButton:hover {
+    background-color: white;
+    color: #004687;
+    transform: scale(1.05);
+}
+
+.mainDashboard {
+    background-color: rgb(235,236,238);
+}
+
+
+
+
+
