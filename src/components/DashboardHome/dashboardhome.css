@@ -15,8 +15,9 @@
     justify-content: space-between;
     color: #fff;
     background-color: #fff;
-    border-bottom: 2px solid #d3d3d3;
+    border-bottom: 2px solid #004687;
     padding: 0px 15px;
+    width: 100vw; 
 }
 
 .logoContainer {
@@ -30,6 +31,7 @@
     align-items: center;
     justify-content: center;
     gap: 15px; 
+    padding: 0px 25px;
 }
 
 .profileIcons {
