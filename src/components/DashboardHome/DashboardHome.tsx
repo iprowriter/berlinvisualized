@@ -3,10 +3,11 @@ import { User, Home, BellRing, Settings, Car, MapIcon, House } from "lucide-reac
 import "./dashboardhome.css";
 import ReactLeafletMap from "../ReactLeaflet.tsx/ReactLeafletMap";
 import { berlinRent } from '../utils/berlinRent';
+import SearchMap from "../SearchMap/SearchMap";
 
 function DashboardHome() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
-  const [selectedView, setSelectedView] = useState("rents");
+  const [selectedView, setSelectedView] = useState("map");
 
   const handleMapClick = (latlng: L.LatLng) => {
     console.log("Clicked location:", latlng);
@@ -63,7 +64,7 @@ function DashboardHome() {
         </div>
         <div className="mainDashboard">
           {selectedView === "overview" && <h1>Overview Content</h1>}
-          {selectedView === "map" && <h1>Rent Analysis</h1>} 
+          {selectedView === "map" && <SearchMap/>} 
           {selectedView === "transports" && <h1>Transport Information</h1>}
           {selectedView === "rents" &&  <ReactLeafletMap coordsArray={berlinRent} PopComponent={MapPopComponent}  onMapClick={handleMapClick } />}
         </div>
