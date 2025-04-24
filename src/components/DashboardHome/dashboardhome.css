@@ -80,7 +80,7 @@
     margin: 0px;
   }
   
-  .sidebar {
+  /* .sidebar {
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -91,7 +91,24 @@
     border-right: 2px solid #fff;
     width: 100%;
     transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+} */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    height: 100%;
+    font-size: 1.2rem;
+    color: #fff;
+    background: linear-gradient(to top, rgba(0, 70, 135, 0.9), rgba(0, 70, 135, 10)), url('/images/globe.jpg'); 
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    border-right: 2px solid #fff;
+    width: 100%;
+    transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
+
 
 /* Collapsed sidebar */
 /* .sidebar.collapsed {
@@ -122,6 +139,14 @@
 .sidebar.collapsed .sidebarIcons span {
     opacity: 0; 
     display: none;
+}
+
+.sidebarIcons:hover {
+    background-color: #004687;
+    border-radius: 15%;
+    margin: 0px 5px;
+    transform: scale(1.1);
+    box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.3);
 }
 
 .toggleButton {

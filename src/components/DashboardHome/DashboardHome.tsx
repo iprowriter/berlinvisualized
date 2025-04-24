@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { User, Home, BellRing, Settings, Car, MapIcon, House } from "lucide-react";
 import "./dashboardhome.css";
+import ReactLeafletMap from "../ReactLeaflet.tsx/ReactLeafletMap";
 
 function DashboardHome() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+  const position: [number, number] = [52.52, 13.405];
 
   return (
     <main className="main">
@@ -49,7 +51,9 @@ function DashboardHome() {
             {!sidebarCollapsed && <span>Rents</span>}
           </div>
         </div>
-        <div className="mainDashboard">map</div>
+        <div className="mainDashboard">
+            <ReactLeafletMap position={position} />
+        </div>
       </section>
     </main>
   );
