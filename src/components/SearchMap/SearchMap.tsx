@@ -3,6 +3,8 @@ import ReactLeafletMap from "../ReactLeaflet.tsx/ReactLeafletMap";
 // import { berlinRent } from "../utils/berlinRent";
 import "./searchmap.css";
 import { Search, X } from "lucide-react";
+import useUIState from "../../store/useUIStore";
+
 
 
 
@@ -12,6 +14,8 @@ const SearchMap: React.FC = () => {
   const [rentData, setRentData] = useState([]);
   const [latlon, setLatlon] = useState<LatLon[]>([]);
   const [boundingBox, setBoundingBox] = useState<number[]>([]);
+  const {notifications,setNotification} = useUIState();
+
 
   useEffect(() => {
     fetch("http://localhost:5000/api/rent")
@@ -46,6 +50,8 @@ const SearchMap: React.FC = () => {
     
         if (!formData.searchQuery) {
             console.log("No search query provided");
+            const newNotification = [...notifications, {id: notifications.length++, message: `No search query provided`, timestamp: new Date()} ]
+            setNotification(newNotification)
             return;
           }
 
@@ -59,6 +65,8 @@ const SearchMap: React.FC = () => {
             const data = await res.json();
             setLatlon([{"latitude": data?.lat, "longitude": data?.lon}])
             setBoundingBox(data?.boundingbox)
+            const newNotification = [...notifications, {id: notifications.length++, message: `Search for ${formData.searchQuery} was successful`, timestamp: new Date()} ]
+            setNotification(newNotification)
             console.log("data latlon", latlon)
             console.log("data boundingBox", boundingBox)
           }

@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "server": "cd server && npm run dev",
-    "startDev": "concurrently \"npm run server\" \"npm run dev\"" 
+    "startDev": "concurrently \"npm run server\" \"npm run dev\""
   },
   "dependencies": {
     "concurrently": "^9.1.2",
@@ -18,7 +18,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-leaflet": "^5.0.0",
-    "react-leaflet-cluster": "^2.1.0"
+    "react-leaflet-cluster": "^2.1.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

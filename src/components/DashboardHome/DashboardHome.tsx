@@ -4,10 +4,12 @@ import "./dashboardhome.css";
 import ReactLeafletMap from "../ReactLeaflet.tsx/ReactLeafletMap";
 import { berlinRent } from '../utils/berlinRent';
 import SearchMap from "../SearchMap/SearchMap";
+import useUIState from "../../store/useUIStore";
 
 function DashboardHome() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const [selectedView, setSelectedView] = useState("map");
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const handleMapClick = (latlng: L.LatLng) => {
     console.log("Clicked location:", latlng);
@@ -18,6 +20,9 @@ function DashboardHome() {
     setSelectedView(view);
   };
 
+  const { notifications } = useUIState();
+
+
   return (
     <main className="main">
       <section className="topMenu">
@@ -27,8 +32,20 @@ function DashboardHome() {
           </div>
         </div>
         <div className="profileContainer">
-          <div className="profileIcons">
+          <div className="profileIcons" onClick={() => setShowNotifications(!showNotifications)}>
             <BellRing size={28} />
+            {notifications.length > 0 && (<span className="notificationBadge">{notifications.length}</span> )} 
+            {showNotifications && (
+              <div className="notificationCard">
+                {notifications?.slice().reverse().map((notif) => (
+                  <div key={notif.id} className="notificationItem">
+                    <p>{notif.message}</p>
+                    <small>{new Date(notif.timestamp).toLocaleString()}</small>
+                  </div>
+                ))}
+              </div>
+            )}
+               
           </div>
           <div className="profileIcons">
             <Settings size={28} />
@@ -62,7 +79,7 @@ function DashboardHome() {
             {!sidebarCollapsed && <span>Rents</span>}
           </div>
         </div>
-        <div className="mainDashboard">
+        <div className="mainDashboard" onClick={() => setShowNotifications(false)}>
           {selectedView === "overview" && <h1>Overview Content</h1>}
           {selectedView === "map" && <SearchMap/>} 
           {selectedView === "transports" && <h1>Transport Information</h1>}
