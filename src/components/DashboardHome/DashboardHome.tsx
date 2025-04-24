@@ -7,6 +7,10 @@ import { berlinRent } from '../utils/berlinRent';
 function DashboardHome() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
+  const handleMapClick = (latlng: L.LatLng) => {
+    console.log("Clicked location:", latlng);
+  };
+
   return (
     <main className="main">
       <section className="topMenu">
@@ -52,7 +56,7 @@ function DashboardHome() {
           </div>
         </div>
         <div className="mainDashboard">
-             <ReactLeafletMap coordsArray={berlinRent} PopComponent={MapPopComponent} />
+             <ReactLeafletMap coordsArray={berlinRent} PopComponent={MapPopComponent}  onMapClick={handleMapClick}/>
         </div>
       </section>
     </main>

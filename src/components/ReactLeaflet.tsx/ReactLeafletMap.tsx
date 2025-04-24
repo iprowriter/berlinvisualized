@@ -1,9 +1,10 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, GeoJSON,   useMapEvents} from 'react-leaflet';
+import MarkerClusterGroup from "react-leaflet-cluster";
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
 
-// Fix marker icon issue in React Leaflet
+//DBG: Fix marker icon issue in React Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -22,6 +23,8 @@ L.Icon.Default.mergeOptions({
     PopComponent = () => null,
     position = [52.52, 13.405],
     zoom = 11,
+    geoJsonData,
+    onMapClick,
     url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   }) => {
     return (
@@ -30,6 +33,9 @@ L.Icon.Default.mergeOptions({
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url={url}
         />
+        {onMapClick && <ClickHandler onClick={onMapClick} />}
+        {geoJsonData && <GeoJSON data={geoJsonData} />}
+        <MarkerClusterGroup>
         {coordsArray.map((item, index) => (
           <Marker
             key={index}
@@ -38,6 +44,7 @@ L.Icon.Default.mergeOptions({
             <Popup> <PopComponent {...item} /></Popup>
           </Marker>
         ))}
+        </MarkerClusterGroup>
       </MapContainer>
     );
   };
@@ -45,12 +52,19 @@ L.Icon.Default.mergeOptions({
 
   export default ReactLeafletMap;
 
+  const ClickHandler = ({ onClick }: { onClick: (latlng: L.LatLng) => void }) => {
+           useMapEvents({click(e) {onClick(e.latlng);}});
+         return null;
+  };
+
   interface ReactLeafletMapProps {
     position?: [number, number]; // Default to Berlin center if not provided
     zoom?: number;
     coordsArray?: any[]; // array of locations with lat/lon
     url?: string;
     PopComponent?: React.FC<any>;
+    geoJsonData?: any;
+    onMapClick?: (latlng: L.LatLng) => void;
   }
   
 
