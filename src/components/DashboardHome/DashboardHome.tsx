@@ -2,10 +2,10 @@ import { useState } from "react";
 import { User, Home, BellRing, Settings, Car, MapIcon, House } from "lucide-react";
 import "./dashboardhome.css";
 import ReactLeafletMap from "../ReactLeaflet.tsx/ReactLeafletMap";
+import { berlinRent } from '../utils/berlinRent';
 
 function DashboardHome() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
-  const position: [number, number] = [52.52, 13.405];
 
   return (
     <main className="main">
@@ -52,7 +52,7 @@ function DashboardHome() {
           </div>
         </div>
         <div className="mainDashboard">
-            <ReactLeafletMap position={position} />
+             <ReactLeafletMap coordsArray={berlinRent} PopComponent={MapPopComponent} />
         </div>
       </section>
     </main>
@@ -60,3 +60,16 @@ function DashboardHome() {
 }
 
 export default DashboardHome;
+
+
+function MapPopComponent({median, average, district, url }: { median?:number, average?:number, district?:string, url?:string}){
+    return (
+        <div style={{display:"flex", flexDirection:"column", width: "400px", height: "400px"}}>
+            <img src={url} alt={district} style={{width: "300px", height: "300px"}} />
+            <strong>{district}</strong><br />
+            <p style={{ height: "5px"}}>Median Rent: €{median}/m² </p>
+            <p style={{ height: "5px"}}>Average Rent: €{average}/m²</p>
+
+        </div>
+    )
+}
