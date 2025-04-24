@@ -6,9 +6,15 @@ import { berlinRent } from '../utils/berlinRent';
 
 function DashboardHome() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+  const [selectedView, setSelectedView] = useState("rents");
 
   const handleMapClick = (latlng: L.LatLng) => {
     console.log("Clicked location:", latlng);
+  };
+
+
+  const handleViewChange = (view: string) => {
+    setSelectedView(view);
   };
 
   return (
@@ -38,25 +44,28 @@ function DashboardHome() {
             {sidebarCollapsed ? "➕" : "➖"}
           </button>
 
-          <div className="sidebarIcons">
-            <Home size={28} style={{ marginRight: "10px" }} />
+          <div className={`sidebarIcons ${selectedView === 'overview' && "sidebarIconSelected"}`}>
+            <Home size={28} style={{ marginRight: "10px" }}  onClick={() => handleViewChange("overview")}/>
             {!sidebarCollapsed && <span>Overview</span>}
           </div>
-          <div className="sidebarIcons">
-            <MapIcon size={28} style={{ marginRight: "10px" }} />
+          <div className={`sidebarIcons ${selectedView === 'map' && "sidebarIconSelected "}`}>
+            <MapIcon size={28} style={{ marginRight: "10px" }} onClick={() => handleViewChange("map")} />
             {!sidebarCollapsed && <span>Map</span>}
           </div>
-          <div className="sidebarIcons">
-            <Car size={28} style={{ marginRight: "10px" }} />
+          <div className={`sidebarIcons ${selectedView === 'transports' && "sidebarIconSelected "}`}>
+            <Car size={28} style={{ marginRight: "10px" }} onClick={() => handleViewChange("transports")} />
             {!sidebarCollapsed && <span>Transports</span>}
           </div>
-          <div className="sidebarIcons">
-            <House size={28} style={{ marginRight: "10px" }} />
+          <div className={`sidebarIcons ${selectedView === 'rents' && "sidebarIconSelected "}`}>
+            <House size={28} style={{ marginRight: "10px" }} onClick={() => handleViewChange("rents")} />
             {!sidebarCollapsed && <span>Rents</span>}
           </div>
         </div>
         <div className="mainDashboard">
-             <ReactLeafletMap coordsArray={berlinRent} PopComponent={MapPopComponent}  onMapClick={handleMapClick}/>
+          {selectedView === "overview" && <h1>Overview Content</h1>}
+          {selectedView === "map" && <h1>Rent Analysis</h1>} 
+          {selectedView === "transports" && <h1>Transport Information</h1>}
+          {selectedView === "rents" &&  <ReactLeafletMap coordsArray={berlinRent} PopComponent={MapPopComponent}  onMapClick={handleMapClick } />}
         </div>
       </section>
     </main>
