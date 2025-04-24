@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup, GeoJSON,   useMapEvents} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, GeoJSON,   useMapEvents, Rectangle} from 'react-leaflet';
 import MarkerClusterGroup from "react-leaflet-cluster";
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -24,6 +24,7 @@ L.Icon.Default.mergeOptions({
     position = [52.52, 13.405],
     zoom = 11,
     geoJsonData,
+    boundingBox,
     onMapClick,
     url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   }) => {
@@ -35,6 +36,16 @@ L.Icon.Default.mergeOptions({
         />
         {onMapClick && <ClickHandler onClick={onMapClick} />}
         {geoJsonData && <GeoJSON data={geoJsonData} />}
+        {boundingBox?.length === 4 && (
+        <Rectangle
+          bounds={[
+            [boundingBox[0], boundingBox[2]], // Southwest
+            [boundingBox[1], boundingBox[3]], // Northeast
+          ]}
+          color="blue"
+          weight={2}
+        />
+      )}
         <MarkerClusterGroup>
         {coordsArray.map((item, index) => (
           <Marker
@@ -61,6 +72,7 @@ L.Icon.Default.mergeOptions({
     position?: [number, number]; // Default to Berlin center if not provided
     zoom?: number;
     coordsArray?: any[]; // array of locations with lat/lon
+    boundingBox?:any[];
     url?: string;
     PopComponent?: React.FC<any>;
     geoJsonData?: any;

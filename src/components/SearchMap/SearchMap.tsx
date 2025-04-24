@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactLeafletMap from "../ReactLeaflet.tsx/ReactLeafletMap";
-import { berlinRent } from "../utils/berlinRent";
+// import { berlinRent } from "../utils/berlinRent";
 import "./searchmap.css";
 import { Search, X } from "lucide-react";
 
@@ -8,12 +8,32 @@ import { Search, X } from "lucide-react";
 
 
 const SearchMap: React.FC = () => {
+  const [formData, setFormData] = useState({searchQuery: "",});
+  const [rentData, setRentData] = useState([]);
+  const [latlon, setLatlon] = useState<LatLon[]>([]);
+  const [boundingBox, setBoundingBox] = useState<number[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/rent")
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        setRentData(data);
+        console.log("server queried successfully", data);
+      })
+      .catch((error) => console.error("Error fetching data all:", error));
+  }, []);
+  
+
+
     const handleMapClick = (latlng: L.LatLng) => {
         console.log("Clicked location:", latlng);
       };
 
 
-      const [formData, setFormData] = useState({searchQuery: "",});
+      
 
       const handleChange = (e:any) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,15 +44,24 @@ const SearchMap: React.FC = () => {
         console.log("Form submitted", formData);
     
     
-        const res = await fetch('/contact/api', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({formData }),
-        });
-        
-        if (res.ok) {
-          alert('Message sent!');
-        }
+        if (!formData.searchQuery) {
+            console.log("No search query provided");
+            return;
+          }
+
+          const res = await fetch(`http://localhost:5000/api/nominatim?address=${formData.searchQuery}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+          });
+          
+          if (res.ok) {
+            // alert('Message sent!');
+            const data = await res.json();
+            setLatlon([{"latitude": data?.lat, "longitude": data?.lon}])
+            setBoundingBox(data?.boundingbox)
+            console.log("data latlon", latlon)
+            console.log("data boundingBox", boundingBox)
+          }
       };
 
 
@@ -46,13 +75,14 @@ const SearchMap: React.FC = () => {
                 required />
             </form>
             <div>
-            <Search size={28} style={{marginRight:'7px', textAlign: 'start'}} onClick={handleSubmit}/>
+            <Search size={28} style={{marginRight:'7px', textAlign: 'start', cursor: formData.searchQuery ? "pointer" : "not-allowed",
+               opacity: formData.searchQuery ? 1 : 0.5}} onClick={handleSubmit}/>
             {formData.searchQuery && <X size={28} onClick={() => setFormData({ ...formData, searchQuery: "" })}/>}
             </div>
             </div>
         </div> 
         <div className="mapContainer">
-          <ReactLeafletMap coordsArray={berlinRent} PopComponent={MapPopComponent} onMapClick={handleMapClick} />
+          <ReactLeafletMap coordsArray={latlon} PopComponent={MapPopComponent} boundingBox={boundingBox}   onMapClick={handleMapClick} />
         </div>
       </main>
     );
@@ -72,4 +102,9 @@ function MapPopComponent({median, average, district, url }: { median?:number, av
 
         </div>
     )
+}
+
+interface LatLon {
+  latitude: number;
+  longitude: number;
 }
