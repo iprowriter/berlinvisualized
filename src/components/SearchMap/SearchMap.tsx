@@ -70,6 +70,12 @@ const SearchMap: React.FC = () => {
             console.log("data latlon", latlon)
             console.log("data boundingBox", boundingBox)
           }
+
+          if (!res.ok) {
+            const newNotification = [...notifications, {id: notifications.length++, message: `Search for ${formData.searchQuery} was not successful`, timestamp: new Date()} ]
+            setNotification(newNotification)
+            setIsLoading(false)
+          }
       };
 
 
