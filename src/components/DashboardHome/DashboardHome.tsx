@@ -5,6 +5,7 @@ import ReactLeafletMap from "../ReactLeaflet.tsx/ReactLeafletMap";
 import { berlinRent } from '../utils/berlinRent';
 import SearchMap from "../SearchMap/SearchMap";
 import useUIState from "../../store/useUIStore";
+import LoadingSpinner from "../LoadingSpinners/LoadingSpinner";
 
 function DashboardHome() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
@@ -20,7 +21,7 @@ function DashboardHome() {
     setSelectedView(view);
   };
 
-  const { notifications } = useUIState();
+  const { notifications, isLoading } = useUIState();
 
 
   return (
@@ -80,6 +81,11 @@ function DashboardHome() {
           </div>
         </div>
         <div className="mainDashboard" onClick={() => setShowNotifications(false)}>
+          {isLoading && <div className="loadingSpinnerContainer">
+          <div className="loadingSpinnerDiv">
+          <LoadingSpinner/>
+          </div>
+          </div>}
           {selectedView === "overview" && <h1>Overview Content</h1>}
           {selectedView === "map" && <SearchMap/>} 
           {selectedView === "transports" && <h1>Transport Information</h1>}

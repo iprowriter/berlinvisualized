@@ -14,7 +14,7 @@ const SearchMap: React.FC = () => {
   const [rentData, setRentData] = useState([]);
   const [latlon, setLatlon] = useState<LatLon[]>([]);
   const [boundingBox, setBoundingBox] = useState<number[]>([]);
-  const {notifications,setNotification} = useUIState();
+  const {notifications,setNotification, setIsLoading} = useUIState();
 
 
   useEffect(() => {
@@ -46,12 +46,14 @@ const SearchMap: React.FC = () => {
       const handleSubmit = async (e:any) => {
         e.preventDefault();
         console.log("Form submitted", formData);
+        setIsLoading(true)
     
     
         if (!formData.searchQuery) {
             console.log("No search query provided");
             const newNotification = [...notifications, {id: notifications.length++, message: `No search query provided`, timestamp: new Date()} ]
             setNotification(newNotification)
+            setIsLoading(false)
             return;
           }
 
@@ -67,6 +69,7 @@ const SearchMap: React.FC = () => {
             setBoundingBox(data?.boundingbox)
             const newNotification = [...notifications, {id: notifications.length++, message: `Search for ${formData.searchQuery} was successful`, timestamp: new Date()} ]
             setNotification(newNotification)
+            setIsLoading(false)
             console.log("data latlon", latlon)
             console.log("data boundingBox", boundingBox)
           }

@@ -6,6 +6,8 @@ interface UIState {
     setSelectedNavOption: (option: string | null) => void;
     notifications: { id: number, message: string, timestamp: Date }[];
     setNotification: (notifications: { id: number, message: string, timestamp: Date }[]) => void;
+    isLoading: boolean;
+    setIsLoading: (isLoading: boolean) => void;
 
 }
 
@@ -13,6 +15,8 @@ interface UIState {
 const useUIState = create<UIState>((set) => ({
     selectedNavOption: null,  // Initial state
     setSelectedNavOption: (option) => set({ selectedNavOption: option }),
+    isLoading: false,
+    setIsLoading: (isLoading) => set({ isLoading: isLoading }),
 
     notifications: [],
     setNotification: (notification) => set({ notifications: notification }),
