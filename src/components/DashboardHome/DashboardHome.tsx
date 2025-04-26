@@ -35,18 +35,7 @@ function DashboardHome() {
         <div className="profileContainer">
           <div className="profileIcons" onClick={() => setShowNotifications(!showNotifications)}>
             <BellRing size={28} />
-            {notifications.length > 0 && (<span className="notificationBadge">{notifications.length}</span> )} 
-            {showNotifications && (
-              <div className="notificationCard">
-                {notifications?.slice().reverse().map((notif) => (
-                  <div key={notif.id} className="notificationItem">
-                    <p>{notif.message}</p>
-                    <small>{new Date(notif.timestamp).toLocaleString()}</small>
-                  </div>
-                ))}
-              </div>
-            )}
-               
+            {notifications.length > 0 && (<span className="notificationBadge">{notifications.length}</span> )}     
           </div>
           <div className="profileIcons">
             <Settings size={28} />
@@ -86,6 +75,16 @@ function DashboardHome() {
           <LoadingSpinner/>
           </div>
           </div>}
+          {showNotifications && (
+              <div className="notificationCard">
+                {notifications?.slice().reverse().map((notif) => (
+                  <div key={notif.id} className="notificationItem">
+                    <p>{notif.message}</p>
+                    <small>{new Date(notif.timestamp).toLocaleString()}</small>
+                  </div>
+                ))}
+              </div>
+            )}
           {selectedView === "overview" && <h1>Overview Content</h1>}
           {selectedView === "map" && <SearchMap/>} 
           {selectedView === "transports" && <h1>Transport Information</h1>}
