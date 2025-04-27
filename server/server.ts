@@ -2,11 +2,16 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import nominatimRouter from "./routes/nominatimRouter.js";
+import openWeatherRouter from "./routes/openWeatherRouter.js";
 
 
 
 
 dotenv.config(); 
+console.log("Loaded ENV Variables:", process.env.OPENWEATHER_API_KEY);
+
+
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -33,6 +38,7 @@ app.get("/api/rent", (req, res) => {
   
 
 app.use("/api/nominatim", nominatimRouter);
+app.use("/api/open-weather", openWeatherRouter);
 
 
 // Start Server

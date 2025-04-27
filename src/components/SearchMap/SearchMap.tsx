@@ -1,8 +1,9 @@
-import {useState } from "react";
+import {useEffect, useState } from "react";
 import ReactLeafletMap from "../ReactLeaflet.tsx/ReactLeafletMap";
 import "./searchmap.css";
 import { Search, X } from "lucide-react";
 import useUIState from "../../store/useUIStore";
+import { getOpenWeather } from "../../apiCalls/ApiCall";
 
 
 
@@ -28,6 +29,11 @@ const SearchMap: React.FC = () => {
   //     })
   //     .catch((error) => console.error("Error fetching data all:", error));
   // }, []);
+
+  useEffect(() => {
+    // Berlin coordinates
+    getOpenWeather(52.52, 13.405);
+  }, []);
   
 
 
