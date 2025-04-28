@@ -3,6 +3,7 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { useEffect } from 'react';
+import { ReactLeafletMapProps } from '../../../server/types';
 
 
 //DBG: Fix marker icon issue in React Leaflet
@@ -86,17 +87,6 @@ L.Icon.Default.mergeOptions({
          return null;
   };
 
-  interface ReactLeafletMapProps {
-    position?: [number, number]; // Default to Berlin center if not provided
-    zoom?: number;
-    coordsArray?: any[]; // array of locations with lat/lon
-    boundingBox?:any[];
-    url?: string;
-    PopComponent?: React.FC<any>;
-    geoJsonData?: any;
-    onMapClick?: (latlng: L.LatLng) => void;
-    zoomToLocation?: boolean;
-  }
-  
+ 
 
 

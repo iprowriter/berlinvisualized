@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import nominatimRouter from "./routes/nominatimRouter.js";
 import openWeatherRouter from "./routes/openWeatherRouter.js";
+import bvgRouter from "./routes/bvgRouter.js";
 
 
 
@@ -39,6 +40,8 @@ app.get("/api/rent", (req, res) => {
 
 app.use("/api/nominatim", nominatimRouter);
 app.use("/api/open-weather", openWeatherRouter);
+app.use('/api/bvg', bvgRouter);
+
 
 
 // Start Server

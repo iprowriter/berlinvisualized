@@ -5,6 +5,7 @@ import { Search, X } from "lucide-react";
 import useUIState from "../../store/useUIStore";
 import { getOpenWeather } from "../../apiCalls/ApiCall";
 import OpenWeather from "../OpenWeather/OpenWeather";
+import { LatLon } from "../../../server/types";
 
 
 
@@ -12,24 +13,10 @@ import OpenWeather from "../OpenWeather/OpenWeather";
 
 const SearchMap: React.FC = () => {
   const [formData, setFormData] = useState({searchQuery: "",});
-  // const [rentData, setRentData] = useState([]);
   const [latlon, setLatlon] = useState<LatLon[]>([]);
   const [boundingBox, setBoundingBox] = useState<number[]>([]);
   const {notifications,setNotification, setIsLoading} = useUIState();
 
-
-  // useEffect(() => {
-  //   fetch("http://localhost:5000/api/rent")
-  //     .then((res) => {
-  //       if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-  //       return res.json();
-  //     })
-  //     .then((data) => {
-  //       setRentData(data);
-  //       console.log("server queried successfully", data);
-  //     })
-  //     .catch((error) => console.error("Error fetching data all:", error));
-  // }, []);
 
   useEffect(() => {
     // Berlin coordinates
@@ -127,8 +114,3 @@ function MapPopComponent({latitude, longitude, display_name }: {latitude?:number
     )
 }
 
-interface LatLon {
-  latitude: number;
-  longitude: number;
-  display_name: string;
-}
