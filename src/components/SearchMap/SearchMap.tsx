@@ -4,6 +4,7 @@ import "./searchmap.css";
 import { Search, X } from "lucide-react";
 import useUIState from "../../store/useUIStore";
 import { getOpenWeather } from "../../apiCalls/ApiCall";
+import OpenWeather from "../OpenWeather/OpenWeather";
 
 
 
@@ -101,6 +102,9 @@ const SearchMap: React.FC = () => {
             </div>
             </div>
         </div> 
+        <div className="weatherBar">
+           <OpenWeather/> 
+        </div>
         <div className="mapContainer">
           <ReactLeafletMap coordsArray={latlon} PopComponent={MapPopComponent} boundingBox={boundingBox} zoomToLocation  onMapClick={handleMapClick} />
         </div>
