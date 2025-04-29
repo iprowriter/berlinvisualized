@@ -16,3 +16,13 @@ export interface LatLon {
     longitude: number;
     display_name: string;
   }
+
+export interface MapLayer {
+  id: string;
+  name: string;
+  visible: boolean;
+  isCluster: boolean;
+  data: any[]; // you can later type this better
+  type: 'marker' | 'polyline' | 'polygon' | 'geojson';
+  renderPopup?: (item: any) => React.ReactNode;
+}

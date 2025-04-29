@@ -1,6 +1,8 @@
 
 
-//DBG: API to call openWeather API from my backend
+
+
+//DBG: OpenWeather
 export async function getOpenWeather(lat: number, lon: number) {
     try {
       const response = await fetch(`http://localhost:5000/api/open-weather?lat=${lat}&lon=${lon}`);
@@ -11,4 +13,19 @@ export async function getOpenWeather(lat: number, lon: number) {
     } catch (err) {
       console.error("Open weather error", err);
     }
+}
+
+
+//DBG: BVG API
+export async function getBVGData(lat: number, lon: number, address:string, setBvgData: (data: any[]) => void) {
+  try {
+    const response = await fetch(`http://localhost:5000/api/bvg?lat=${lat}&lon=${lon}&address=${address}`);
+    if (!response.ok) throw new Error("Failed to fetch BVG transportation data");
+    const data = await response.json();
+    setBvgData(data)
+    console.log("BVG transportation data", data);
+    return data;
+  } catch (err) {
+    console.error("BVG data error", err);
+  }
 }
