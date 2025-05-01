@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { useEffect } from 'react';
 import { MapLayer } from '../../../server/types';
+import React from 'react';
 
 
 
@@ -85,23 +86,27 @@ L.Icon.Default.mergeOptions({
             if (!layer.visible) return null;
 
             if (layer.type === "marker") {
-                return layer.isCluster ? (
-                <MarkerClusterGroup key={layer.id}>
-                    {layer.data.map((item, index) => (
-                    <Marker key={`${layer.id}-${index}`} position={[item.latitude, item.longitude]}>
-                        {layer.renderPopup && <Popup>{layer.renderPopup(item)}</Popup>}
-                    </Marker>
-                    ))}
-                </MarkerClusterGroup>
-                ) : (
-                <>
-                    {layer.data.map((item, index) => (
-                    <Marker key={`${layer.id}-${index}`} position={[item.latitude, item.longitude]}>
-                        {layer.renderPopup && <Popup>{layer.renderPopup(item)}</Popup>}
-                    </Marker>
-                    ))}
-                </>
+
+
+              const markers = layer.data.map((item, index) => {
+                if (layer.renderMarker) {
+                  return <React.Fragment key={`${layer.id}-${index}`}>{layer.renderMarker(item, index)}</React.Fragment>;
+                }
+          
+                return (
+                  <Marker key={`${layer.id}-${index}`} position={[item.latitude, item.longitude]}>
+                    {layer.renderPopup && <Popup>{layer.renderPopup(item)}</Popup>}
+                  </Marker>
                 );
+              });
+
+              
+              return layer.isCluster ? (
+                <MarkerClusterGroup key={layer.id}>{markers}</MarkerClusterGroup>
+              ) : (
+                <React.Fragment key={layer.id}>{markers}</React.Fragment>
+              );
+      
             }
             return null;
             })}

@@ -74,14 +74,9 @@ const SearchMap: React.FC = () => {
             updateLayerData('location_layer', newLatlon )
            const newBvgData = await getBVGData(data?.lat, data?.lon, formatString(formData.searchQuery), setBvgData);
             console.log('SearchMap BVG: ', newBvgData )
-            const extractedCoordinates = newBvgData.reachable.flatMap(reachable =>
-              reachable.stations.map(station => ({
-                latitude: station.location.latitude,
-                longitude: station.location.longitude,
-                name: station.name
-              }))
-            );
-            updateLayerData("transportation_layer", extractedCoordinates);
+            const stations = newBvgData?.reachable?.flatMap((r: { stations: any; }) => r.stations) || [];
+
+            updateLayerData("transportation_layer", stations);
           }
 
           if (!res.ok) {
@@ -90,68 +85,6 @@ const SearchMap: React.FC = () => {
             setIsLoading(false)
           }
       };
-
-
-      const test = [{
-        latitude: '51.3270575',
-        longitude: '12.3903429',
-        display_name: '33, Philipp-Rosenthal-Straße, Zentrum-Südost, Mitte, Leipzig, Sachsen, 04103, Deutschland',
-        boundingbox: [ '51.3268166', '51.3272969', '12.3901633', '12.3905227' ]
-      }]
-
-      const test2 = [{
-        latitude:  '52.4289765',
-        longitude: '13.5290776',
-        display_name: '29, Rudower Chaussee, Adlershof, Treptow-Köpenick, Berlin, 12489, Deutschland',
-         }]
-
-      const test3 = [{
-          latitude:  '52.43997210418351',
-          longitude: '13.526832529751482',
-          display_name: '29, Rudower Chaussee, Adlershof, Treptow-Köpenick, Berlin, 12489, Deutschland',
-           }]
-
-           const test4 = [{
-            latitude:  '52.433536062126265',
-            longitude: '13.483144714123222',
-            display_name: '29, Rudower Chaussee, Adlershof, Treptow-Köpenick, Berlin, 12489, Deutschland',
-             }]
-  
-
-
-
-
-
-       const layers = [{
-           id: 'location-layer',
-           name: 'location',
-           visible: true,
-           data: latlon,
-           type: 'marker' as "marker",
-         },
-         {
-          id: 'layer',
-          name: 'leipzig',
-          visible: true,
-          data: test,
-          type: 'marker' as "marker",
-        },
-        {
-          id: 'layer2',
-          name: 'leipzig',
-          visible: true,
-          data: test2,
-          type: 'marker' as "marker",
-        },
-
-        {
-          id: 'layer3',
-          name: 'leipzig',
-          visible: true,
-          data: test3,
-          type: 'marker' as "marker",
-        },
-        ]
 
         useEffect(() => {
           console.log("New mapLayers being sent to Map:", mapLayers);

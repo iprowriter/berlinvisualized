@@ -1,5 +1,8 @@
 import { create } from "zustand";
 import { MapLayer } from "../../server/types";
+import BvgTransportationLayer from "../components/Bvg/Bvg";
+
+
 
 // Define the state shape
 interface ReactLeafletState {
@@ -9,11 +12,15 @@ interface ReactLeafletState {
 
 }
 
+
+
 // Create the store
 const useReactLeafletMapStore = create<ReactLeafletState>((set) => ({
     mapLayers: [
         {id: 'location_layer', name: 'location', isCluster: false, visible: true, data: [], type: 'marker' as 'marker'},
-        {id: 'transportation_layer', name: 'bvg',isCluster: true, visible: true, data: [], type: 'marker'},
+        {id: 'transportation_layer', name: 'bvg',isCluster: true, visible: true, data: [],type: 'marker',  renderMarker: (item: any, index: number) => {
+          return <BvgTransportationLayer item={item} index={index} />;
+        },},
     ],  
 
     toggleLayerVisibility: (id) => set((state) => ({
@@ -24,14 +31,18 @@ const useReactLeafletMapStore = create<ReactLeafletState>((set) => ({
 
     //Data: Function to update data
     updateLayerData: (id, data) =>
-        set((state) => {
-          console.log(`Updating ${id} with data:`, data);
-          return {
-            mapLayers: state.mapLayers.map((layer) =>
-              layer.id === id ? { ...layer, data: [...data] } : layer
-            ),
-          };
-        }),
+      set((state) => {
+        if (!Array.isArray(data)) {
+          console.error(`updateLayerData error: expected array but got`, data);
+          return {}; // no state update
+        }
+    
+        return {
+          mapLayers: state.mapLayers.map((layer) =>
+            layer.id === id ? { ...layer, data: [...data] } : layer
+          ),
+        };
+      }),
       
 
 }));
