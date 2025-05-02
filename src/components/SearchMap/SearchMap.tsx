@@ -4,7 +4,7 @@ import "./searchmap.css";
 import { Search, X } from "lucide-react";
 import useUIState from "../../store/useUIStore";
 import useReactLeafletMapStore from "../../store/useReactLeafletMapStore";
-import { getBVGData, getOpenWeather } from "../../apiCalls/ApiCall";
+import { getBerlinConstructions, getBVGData, getOpenWeather } from "../../apiCalls/ApiCall";
 import OpenWeather from "../OpenWeather/OpenWeather";
 import { LatLon } from "../../../server/types";
 import ReactLealfetMapTest from "../ReactLeaflet.tsx/ReactLealfetMapTest";
@@ -77,6 +77,7 @@ const SearchMap: React.FC = () => {
             const stations = newBvgData?.reachable?.flatMap((r: { stations: any; }) => r.stations) || [];
 
             updateLayerData("transportation_layer", stations);
+            getBerlinConstructions(data?.lat, data?.lon)
           }
 
           if (!res.ok) {

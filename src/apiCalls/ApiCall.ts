@@ -29,3 +29,16 @@ export async function getBVGData(lat: number, lon: number, address:string, setBv
     console.error("BVG data error", err);
   }
 }
+
+
+//DBG: Berlin Road Constructions API
+export async function getBerlinConstructions(lat: number, lon: number) {
+  try {
+    const response = await fetch(`http://localhost:5000/api/berlin-constructions?lat=${lat}&lon=${lon}`);
+    if (!response.ok) throw new Error("Failed to fetch Berlin construction data");
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error("BVG data error", err);
+  }
+}
