@@ -52,3 +52,59 @@ export interface BvgTransportationLayerProps {
   item: BvgStation;
   index: number;
 }
+
+
+interface Validity {
+  from: string;
+  to: string;
+}
+
+interface NetRef {
+  id: string;
+  fromNode: string;
+}
+
+interface NearbyProperties {
+  id: string;
+  tstore: string;
+  objectState: string;
+  subtype: string;
+  severity: string;
+  validity: Validity;
+  direction: string;
+  icon: string;
+  is_future?: boolean;
+  street: string;
+  section: string;
+  content: string;
+  netrefs?: NetRef[];
+}
+
+interface PointGeometry {
+  type: "Point";
+  coordinates: [number, number];
+}
+
+interface LineStringGeometry {
+  type: "LineString";
+  coordinates: [number, number][];
+}
+
+interface GeometryCollection {
+  type: "GeometryCollection";
+  geometries: (PointGeometry | LineStringGeometry)[];
+}
+
+export interface NearbyFeature {
+  type: "Feature";
+  properties: NearbyProperties;
+  geometry: PointGeometry | GeometryCollection;
+}
+
+// export interface  BerlinConstructionsLayerProps {
+//   nearby: NearbyFeature[];
+// }
+export interface BerlinConstructionsLayerProps{
+  item: NearbyFeature;
+  index: number;
+}

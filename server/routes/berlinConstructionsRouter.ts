@@ -12,8 +12,6 @@ berlinConstructionsRouter.get('/', async (req: any, res: any) => {
 
   const BASE_URL = 'https://api.viz.berlin.de/daten/baustellen_sperrungen.json';
 
-  console.log('Berlin construction request params:', lat, lon);
-
   if (!lat || !lon ) {
     return res.status(400).json({ error: 'Missing latitude and longitude' });
   }
@@ -29,7 +27,6 @@ berlinConstructionsRouter.get('/', async (req: any, res: any) => {
         const coords = extractBerlinConstructionData(feature.geometry);
         return coords.some(coord => isConstructionNearBy(coord, searchCoord));
     });
-    console.log('Nearby constructions:', nearbyConstructions);
     res.json({ nearby: nearbyConstructions});
 
   } catch (error: any) {

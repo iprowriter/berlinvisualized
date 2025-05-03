@@ -6,7 +6,7 @@ import useUIState from "../../store/useUIStore";
 import useReactLeafletMapStore from "../../store/useReactLeafletMapStore";
 import { getBerlinConstructions, getBVGData, getOpenWeather } from "../../apiCalls/ApiCall";
 import OpenWeather from "../OpenWeather/OpenWeather";
-import { LatLon } from "../../../server/types";
+import { LatLon, NearbyFeature } from "../../../server/types";
 import ReactLealfetMapTest from "../ReactLeaflet.tsx/ReactLealfetMapTest";
 import { formatString } from "../utils/helperFunctions";
 import useFetchedDataStore from "../../store/useFetchedDataStore";
@@ -21,7 +21,7 @@ const SearchMap: React.FC = () => {
   const [boundingBox, setBoundingBox] = useState<number[]>([]);
   const {notifications,setNotification, setIsLoading} = useUIState();
   const {mapLayers, updateLayerData} = useReactLeafletMapStore();
-  const {bvgData, setBvgData } = useFetchedDataStore();
+  const {setBvgData, setBerlinConstructionsData } = useFetchedDataStore();
 
 
 
@@ -43,7 +43,6 @@ const SearchMap: React.FC = () => {
     
     const handleSubmit = async (e:any) => {
         e.preventDefault();
-        console.log("Form submitted", formData);
         setIsLoading(true)
     
     
@@ -69,15 +68,16 @@ const SearchMap: React.FC = () => {
             const newNotification = [...notifications, {id: notifications.length++, message: `Search for ${formData.searchQuery} was successful`, timestamp: new Date()} ]
             setNotification(newNotification)
             setIsLoading(false)
-            console.log("data latlon", latlon)
-            console.log("data boundingBox", boundingBox)
             updateLayerData('location_layer', newLatlon )
            const newBvgData = await getBVGData(data?.lat, data?.lon, formatString(formData.searchQuery), setBvgData);
             console.log('SearchMap BVG: ', newBvgData )
             const stations = newBvgData?.reachable?.flatMap((r: { stations: any; }) => r.stations) || [];
+            const berlinConstructons = await  getBerlinConstructions(data?.lat, data?.lon, setBerlinConstructionsData)
+            const constructions = berlinConstructons?.nearby?.map((f: NearbyFeature) => f) || [];
+
 
             updateLayerData("transportation_layer", stations);
-            getBerlinConstructions(data?.lat, data?.lon)
+            updateLayerData("berlin_construction_layer", constructions);
           }
 
           if (!res.ok) {
@@ -86,10 +86,6 @@ const SearchMap: React.FC = () => {
             setIsLoading(false)
           }
       };
-
-        useEffect(() => {
-          console.log("New mapLayers being sent to Map:", mapLayers);
-        }, [mapLayers]);
 
 
     return (

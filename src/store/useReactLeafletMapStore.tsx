@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { MapLayer } from "../../server/types";
 import BvgTransportationLayer from "../components/Bvg/Bvg";
+import BerlinConstructionsLayer from "../components/BerlinConstruction/BerlinConstructions";
 
 
 
@@ -20,6 +21,9 @@ const useReactLeafletMapStore = create<ReactLeafletState>((set) => ({
         {id: 'location_layer', name: 'location', isCluster: false, visible: true, data: [], type: 'marker' as 'marker'},
         {id: 'transportation_layer', name: 'bvg',isCluster: true, visible: true, data: [],type: 'marker',  renderMarker: (item: any, index: number) => {
           return <BvgTransportationLayer item={item} index={index} />;
+        },},
+        {id: 'berlin_construction_layer', name: 'road_constructions',isCluster: true, visible: true, data: [],type: 'marker',  renderMarker: (item: any, index: number) => {
+          return <BerlinConstructionsLayer item={item} index={index} />;
         },},
     ],  
 
