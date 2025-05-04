@@ -10,6 +10,7 @@ import { LatLon, NearbyFeature } from "../../../server/types";
 import ReactLealfetMapTest from "../ReactLeaflet.tsx/ReactLealfetMapTest";
 import { formatString } from "../utils/helperFunctions";
 import useFetchedDataStore from "../../store/useFetchedDataStore";
+import ToggleLayers from "../ViewControls/ToggleLayers";
 
 
 
@@ -104,11 +105,14 @@ const SearchMap: React.FC = () => {
             </div>
             </div>
         </div> 
-        <div className="weatherBar">
-           <OpenWeather/> 
+        <div className="toggleLayerBar">
+           <ToggleLayers/> 
         </div>
+        {/* <div className="weatherBar">
+           <OpenWeather/> 
+        </div> */}
         <div className="mapContainer">
-          {/* <ReactLeafletMap coordsArray={latlon} PopComponent={MapPopComponent} boundingBox={boundingBox} zoomToLocation  onMapClick={handleMapClick} /> */}
+          {/* <ReactLeafletMap coordsArray={latlon} PopComponent={MapPopComponent} boundingBox={boundingBox} zoomToLocation onMapClick={handleMapClick} /> */}
 
           <ReactLealfetMapTest  PopComponent={MapPopComponent} boundingBox={boundingBox} zoomToLocation onMapClick={handleMapClick} layers={mapLayers} />
         </div>
