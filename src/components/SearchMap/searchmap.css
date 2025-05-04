@@ -92,9 +92,19 @@
 .toggleLayerBar {
   position: absolute;
   top: 132px;
-  left: 85%;
+  left: 84%;
   z-index: 1000;
   cursor: pointer;
   box-sizing: border-box;;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+}
+
+.toggleLayerMinimzedBar {
+  position: absolute;
+  top: 132px;
+  left: 92%;
+  z-index: 1000;
+  cursor: pointer;
+  /* box-sizing: border-box; */
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02); */
 }

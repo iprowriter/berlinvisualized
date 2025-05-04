@@ -20,7 +20,7 @@ const SearchMap: React.FC = () => {
   const [formData, setFormData] = useState({searchQuery: "",});
   const [latlon, setLatlon] = useState<LatLon[]>([]);
   const [boundingBox, setBoundingBox] = useState<number[]>([]);
-  const {notifications,setNotification, setIsLoading} = useUIState();
+  const {isLayersTogglerMinimized, notifications,setNotification, setIsLoading} = useUIState();
   const {mapLayers, updateLayerData} = useReactLeafletMapStore();
   const {setBvgData, setBerlinConstructionsData } = useFetchedDataStore();
 
@@ -105,7 +105,7 @@ const SearchMap: React.FC = () => {
             </div>
             </div>
         </div> 
-        <div className="toggleLayerBar">
+        <div className={isLayersTogglerMinimized? "toggleLayerMinimzedBar" : "toggleLayerBar"}>
            <ToggleLayers/> 
         </div>
         {/* <div className="weatherBar">
