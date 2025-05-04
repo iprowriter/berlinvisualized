@@ -1,21 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import "./toggle-layer.css";
 import useReactLeafletMapStore from "../../store/useReactLeafletMapStore";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 import useUIState from "../../store/useUIStore";
 
 const ToggleLayers: React.FC = () => {
-
-    const [minimizeToggler, setMinimizeToggler] = useState<boolean>(true)
     const {isLayersTogglerMinimized, setIsLayersTogglerMinimized } = useUIState();
   
-  
+
     const mapLayers = useReactLeafletMapStore((state) => state.mapLayers);
     const toggleLayerVisibility = useReactLeafletMapStore((state) => state.toggleLayerVisibility);
-  
     const getLayerById = (id: string) => mapLayers.find((layer) => layer.id === id);
-
-
 
   return (
     <React.Fragment>
