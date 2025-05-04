@@ -1,29 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import "./toggle-layer.css";
 import useReactLeafletMapStore from "../../store/useReactLeafletMapStore";
 
 const ToggleLayers: React.FC = () => {
-  const [locationVisible, setLocationVisible] = useState(false);
-  const [transportVisible, setTransportVisible] = useState(true);
-  const [constructionVisible, setTonstructionVisibleVisible] = useState(true);
-
-
-  const {toggleLayerVisibility} = useReactLeafletMapStore();
-
-  const handleLocation = () => {
-    setLocationVisible(!locationVisible);
-    toggleLayerVisibility('location_layer');
-  }
-
-  const handleTransportation = () => {
-    setTransportVisible(!transportVisible)
-    toggleLayerVisibility('transportation_layer');
-  } 
-
-  const handleConstruction = () => {
-    setTonstructionVisibleVisible(!constructionVisible )
-    toggleLayerVisibility('berlin_construction_layer');
-  } 
+  
+  
+    const mapLayers = useReactLeafletMapStore((state) => state.mapLayers);
+    const toggleLayerVisibility = useReactLeafletMapStore((state) => state.toggleLayerVisibility);
+  
+    const getLayerById = (id: string) => mapLayers.find((layer) => layer.id === id);
 
 
 
@@ -32,19 +17,19 @@ const ToggleLayers: React.FC = () => {
       <h3>Toggle Layers</h3>
 
       {/* Location Toggle */}
-      <div className={`toggleButton ${locationVisible ? "toggleChecked" : ""}`} onClick={() => handleLocation()}>
+      <div className={`toggleButton ${getLayerById("location_layer")?.visible ? "toggleChecked" : ""}`} onClick={() => toggleLayerVisibility("location_layer")}>
         <span>📍 Location</span>
         <div className="switch"></div>
       </div>
 
       {/* Transport Toggle */}
-      <div className={`toggleButton ${transportVisible ? "toggleChecked" : ""}`} onClick={() => handleTransportation()}>
+      <div className={`toggleButton ${getLayerById("transportation_layer")?.visible ? "toggleChecked" : ""}`} onClick={() => toggleLayerVisibility("transportation_layer")}>
         <span>🚉 Transport</span>
         <div className="switch"></div>
       </div>
 
       {/* Transport Toggle */}
-      <div className={`toggleButton ${constructionVisible ? "toggleChecked" : ""}`} onClick={() => handleConstruction()}>
+      <div className={`toggleButton ${getLayerById("berlin_construction_layer")?.visible ? "toggleChecked" : ""}`} onClick={() => toggleLayerVisibility("berlin_construction_layer")}>
         <span>🚧 Constructions </span>
         <div className="switch"></div>
       </div>
