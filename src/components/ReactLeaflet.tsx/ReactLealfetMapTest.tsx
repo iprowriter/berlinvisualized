@@ -56,10 +56,12 @@ L.Icon.Default.mergeOptions({
     url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     layers = []
   }) => {
-    const isLayerVisible  = layers.find(layer => layer.visible)
+
+    // const isLayerVisible  = layers.find(layer => layer.visible)
+    // const isValidCoord = (point: any): point is { latitude: number, longitude: number } =>
+    //   typeof point?.latitude === 'number' && typeof point?.longitude === 'number';
+
     const firstPoint = layers.find(layer => layer.visible && layer.type === 'marker' && layer.data.length > 0)?.data[0];
-    const isValidCoord = (point: any): point is { latitude: number, longitude: number } =>
-      typeof point?.latitude === 'number' && typeof point?.longitude === 'number';
 
     return (
       <MapContainer center={position} zoom={zoom} scrollWheelZoom={true} style={{ height: "100%", width: "100%" }} >

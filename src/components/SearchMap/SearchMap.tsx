@@ -1,11 +1,11 @@
 import {useEffect, useState } from "react";
-import ReactLeafletMap from "../ReactLeaflet.tsx/ReactLeafletMap";
+// import ReactLeafletMap from "../ReactLeaflet.tsx/ReactLeafletMap";
 import "./searchmap.css";
 import { Search, X } from "lucide-react";
 import useUIState from "../../store/useUIStore";
 import useReactLeafletMapStore from "../../store/useReactLeafletMapStore";
 import { getBerlinConstructions, getBVGData, getOpenWeather } from "../../apiCalls/ApiCall";
-import OpenWeather from "../OpenWeather/OpenWeather";
+// import OpenWeather from "../OpenWeather/OpenWeather";
 import { LatLon, NearbyFeature } from "../../../server/types";
 import ReactLealfetMapTest from "../ReactLeaflet.tsx/ReactLealfetMapTest";
 import { formatString } from "../utils/helperFunctions";
