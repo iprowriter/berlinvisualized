@@ -56,6 +56,7 @@ L.Icon.Default.mergeOptions({
     url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     layers = []
   }) => {
+    const isLayerVisible  = layers.find(layer => layer.visible)
     const firstPoint = layers.find(layer => layer.visible && layer.type === 'marker' && layer.data.length > 0)?.data[0];
     const isValidCoord = (point: any): point is { latitude: number, longitude: number } =>
       typeof point?.latitude === 'number' && typeof point?.longitude === 'number';
@@ -66,7 +67,7 @@ L.Icon.Default.mergeOptions({
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url={url}
         />
-        {zoomToLocation && isValidCoord(firstPoint) &&(
+        {zoomToLocation &&  firstPoint &&(
         <MapUpdater coords={[firstPoint.latitude, firstPoint.longitude]} zoom={17} />
       )}
         {onMapClick && <ClickHandler onClick={onMapClick} />}

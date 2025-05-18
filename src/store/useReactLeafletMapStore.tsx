@@ -27,11 +27,14 @@ const useReactLeafletMapStore = create<ReactLeafletState>((set) => ({
         },},
     ],  
 
-    toggleLayerVisibility: (id) => set((state) => ({
-            mapLayers: state.mapLayers.map((layer) =>
-                layer.id === id ? { ...layer, visible: !layer.visible } : layer
-            ),
-        })),
+    toggleLayerVisibility: (id) =>
+      set((state) => {
+        const newMapLayers = state.mapLayers.map((layer) =>
+          layer.id === id ? { ...layer, visible: !layer.visible } : layer
+        );
+    
+        return { mapLayers: [...newMapLayers] }; // ✅ Ensures React re-renders
+      }),
 
     //Data: Function to update data
     updateLayerData: (id, data) =>
