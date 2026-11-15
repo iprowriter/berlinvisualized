@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";
 
 /** Anything that can be placed on the map by latitude/longitude. */
 export interface Coordinates {
@@ -110,6 +111,7 @@ export interface BerlinConstructionsLayerProps {
 /** The subset of the OpenWeather "current weather" response the UI uses. */
 export interface OpenWeatherResponse {
   name: string;
+  weather: { main: string; description: string }[];
   main: { temp: number; feels_like: number; humidity: number };
   sys: { sunrise: number; sunset: number };
 }
@@ -134,3 +136,10 @@ export interface Notification {
   message: string;
   timestamp: Date;
 }
+
+// ---------- Districts ----------
+
+/** Response of GET /api/districts: the 12 Berlin districts (Bezirke). */
+export type DistrictCollection = FeatureCollection<Polygon | MultiPolygon, { id: string; name: string }>;
+
+export type View = "overview" | "map" | "transports" | "rents";

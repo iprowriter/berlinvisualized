@@ -6,17 +6,18 @@ import { berlinRent } from '../utils/berlinRent';
 import SearchMap from "../SearchMap/SearchMap";
 import useUIState from "../../store/useUIStore";
 import LoadingSpinner from "../LoadingSpinners/LoadingSpinner";
+import Overview from "../Overview/Overview";
+import type { View } from "../../types";
 
 function DashboardHome() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
-  const [selectedView, setSelectedView] = useState("map");
   const [showNotifications, setShowNotifications] = useState(false);
 
-  const handleViewChange = (view: string) => {
+  const { notifications, isLoading, selectedView, setSelectedView } = useUIState();
+
+  const handleViewChange = (view: View) => {
     setSelectedView(view);
   };
-
-  const { notifications, isLoading } = useUIState();
 
 
   return (
@@ -80,7 +81,7 @@ function DashboardHome() {
                 ))}
               </div>
             )}
-          {selectedView === "overview" && <h1>Overview Content</h1>}
+          {selectedView === "overview" && <Overview />}
           {selectedView === "map" && <SearchMap/>} 
           {selectedView === "transports" && <h1>Transport Information</h1>}
           {selectedView === "rents" &&  <ReactLeafletMap coordsArray={berlinRent} PopComponent={MapPopComponent} />}

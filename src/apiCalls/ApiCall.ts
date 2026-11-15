@@ -2,6 +2,7 @@ import { API_URL } from "../config/api";
 import type {
   BerlinConstructionsResponse,
   BvgReachableResponse,
+  DistrictCollection,
   NominatimLocation,
   OpenWeatherResponse,
 } from "../types";
@@ -54,4 +55,8 @@ export async function getBerlinConstructions(
   );
   if (data) setBerlinConstructionsData(data);
   return data;
+}
+
+export function getDistricts() {
+  return getJson<DistrictCollection>("/api/districts", "Failed to fetch district boundaries");
 }

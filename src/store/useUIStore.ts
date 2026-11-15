@@ -1,7 +1,12 @@
 import { create } from "zustand";
-import type { Notification } from "../types";
+import type { Notification, View } from "../types";
 
 interface UIState {
+  selectedView: View;
+  setSelectedView: (view: View) => void;
+  /** A search typed on the Overview page, picked up and run by SearchMap when it mounts. */
+  pendingSearch: string | null;
+  setPendingSearch: (query: string | null) => void;
   selectedNavOption: string | null;
   setSelectedNavOption: (option: string | null) => void;
   notifications: Notification[];
@@ -14,6 +19,11 @@ interface UIState {
 }
 
 const useUIState = create<UIState>((set) => ({
+  selectedView: "overview",
+  setSelectedView: (selectedView) => set({ selectedView }),
+  pendingSearch: null,
+  setPendingSearch: (pendingSearch) => set({ pendingSearch }),
+
   selectedNavOption: null,
   setSelectedNavOption: (option) => set({ selectedNavOption: option }),
 

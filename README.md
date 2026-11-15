@@ -1,6 +1,6 @@
 # Berlin Visualized
 
-An interactive map dashboard for Berlin. Search for an address and see what's around it:
+An interactive map dashboard for Berlin. The **Overview** landing page compares the 12 districts on a map and shows what Berlin looks like right now. Search for an address to see what's around it:
 
 - **Public transport**: BVG stations reachable from the address, with icons for S-Bahn, tram and bus
 - **Road works**: construction sites and closures within 1 km, with affected road sections drawn as lines
@@ -23,6 +23,7 @@ Each data set is a map layer you can toggle on or off.
 - [BVG REST API (v6.bvg.transport.rest)](https://v6.bvg.transport.rest/) for reachable stations
 - [VIZ Berlin](https://viz.berlin.de/) for construction sites and road closures
 - [OpenWeather](https://openweathermap.org/api) for current weather (needs a free API key)
+- [Geoportal Berlin](https://gdi.berlin.de) for district boundaries
 
 The frontend never calls these services directly. It goes through the Express backend, which keeps the API key on the server and caches weather responses for 60 s to stay inside OpenWeather's free tier.
 
@@ -94,9 +95,10 @@ All endpoints are served by the backend under `/api`.
 | `GET /api/bvg` | `lat`, `lon`, `address` | Stations reachable from the location |
 | `GET /api/berlin-constructions` | `lat`, `lon` | `{ nearby: Feature[] }`: construction sites within 1 km |
 | `GET /api/open-weather` | `lat`, `lon` | OpenWeather current weather (cached for 60 s) |
+| `GET /api/districts` | none | The 12 district boundaries as GeoJSON (from Geoportal Berlin, cached 24 h) |
 | `GET /api/rent` | none | Sample rent data |
 
-Missing parameters return `400`. Upstream failures return `500`.
+Missing parameters return `400`. Upstream failures return `500` (`502` for `/api/districts`).
 
 ## Project structure
 
@@ -104,6 +106,7 @@ Missing parameters return `400`. Upstream failures return `500`.
 ├── src/
 │   ├── apiCalls/          # Typed fetch helpers for the backend
 │   ├── components/
+│   │   ├── Overview/      # Landing page: hero search, live strip, district choropleth, themes
 │   │   ├── Map/           # LayeredMap (search map), ReactLeafletMap (rents), map helpers
 │   │   ├── SearchMap/     # Address search + layer orchestration
 │   │   ├── Bvg/           # Transport station markers
@@ -113,6 +116,11 @@ Missing parameters return `400`. Upstream failures return `500`.
 │   ├── config/api.ts      # API base URL (from VITE_API_URL)
 │   ├── store/             # Zustand stores (UI, map layers, fetched data)
 │   └── types.ts           # Shared frontend types
+├── data/
+│   ├── README.md          # What each dataset is, source and license
+│   ├── sources.json       # Manifest for re-downloading the raw data
+│   └── raw/               # Downloaded third-party datasets (gitignored)
+├── docs/adr/              # Architecture decision records (data sources, layers, landing page)
 └── server/
     ├── app.ts             # Express app and routes (imported by tests)
     ├── server.ts          # Entry point: loads .env and starts listening
@@ -120,6 +128,11 @@ Missing parameters return `400`. Upstream failures return `500`.
     ├── utils/             # Geo helpers (distance filtering), error helpers
     └── tests/             # Vitest + Supertest
 ```
+
+## Architecture decisions
+
+Design decisions and the dataset roadmap live in [`docs/adr/`](docs/adr/README.md). Start with
+[ADR 0003](docs/adr/0003-berlin-data-sources.md) for the list of datasets and their sources.
 
 ## License
 

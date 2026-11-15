@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./searchmap.css";
 import { Search, X } from "lucide-react";
 import useUIState from "../../store/useUIStore";
@@ -13,7 +13,7 @@ import ToggleLayers from "../ViewControls/ToggleLayers";
 const SearchMap: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [boundingBox, setBoundingBox] = useState<number[]>([]);
-  const { isLayersTogglerMinimized, addNotification, setIsLoading } = useUIState();
+  const { isLayersTogglerMinimized, addNotification, setIsLoading, setPendingSearch } = useUIState();
   const { mapLayers, updateLayerData } = useReactLeafletMapStore();
   const { setBvgData, setBerlinConstructionsData } = useFetchedDataStore();
 
@@ -22,38 +22,53 @@ const SearchMap: React.FC = () => {
     getOpenWeather(52.52, 13.405);
   }, []);
 
-  const handleSubmit = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
+  const runSearch = useCallback(
+    async (query: string) => {
+      if (!query) {
+        addNotification("No search query provided");
+        return;
+      }
 
-    if (!searchQuery) {
-      addNotification("No search query provided");
-      return;
-    }
+      setIsLoading(true);
+      const data = await geocodeAddress(query);
 
-    setIsLoading(true);
-    const data = await geocodeAddress(searchQuery);
+      if (!data) {
+        addNotification(`Search for ${query} was not successful`);
+        setIsLoading(false);
+        return;
+      }
 
-    if (!data) {
-      addNotification(`Search for ${searchQuery} was not successful`);
+      const lat = Number(data.lat);
+      const lon = Number(data.lon);
+      const location: LatLon[] = [{ latitude: lat, longitude: lon, display_name: data.display_name }];
+
+      setBoundingBox(data.boundingbox.map(Number));
+      addNotification(`Search for ${query} was successful`);
       setIsLoading(false);
-      return;
-    }
+      updateLayerData("location_layer", location);
 
-    const lat = Number(data.lat);
-    const lon = Number(data.lon);
-    const location: LatLon[] = [{ latitude: lat, longitude: lon, display_name: data.display_name }];
+      const bvgData = await getBVGData(lat, lon, formatString(query), setBvgData);
+      const stations = bvgData?.reachable?.flatMap((r) => r.stations) ?? [];
+      const constructions = await getBerlinConstructions(lat, lon, setBerlinConstructionsData);
 
-    setBoundingBox(data.boundingbox.map(Number));
-    addNotification(`Search for ${searchQuery} was successful`);
-    setIsLoading(false);
-    updateLayerData("location_layer", location);
+      updateLayerData("transportation_layer", stations);
+      updateLayerData("berlin_construction_layer", constructions?.nearby ?? []);
+    },
+    [addNotification, setIsLoading, updateLayerData, setBvgData, setBerlinConstructionsData],
+  );
 
-    const bvgData = await getBVGData(lat, lon, formatString(searchQuery), setBvgData);
-    const stations = bvgData?.reachable?.flatMap((r) => r.stations) ?? [];
-    const constructions = await getBerlinConstructions(lat, lon, setBerlinConstructionsData);
+  // Run a search handed over from the Overview page.
+  useEffect(() => {
+    const pending = useUIState.getState().pendingSearch;
+    if (!pending) return;
+    setPendingSearch(null);
+    setSearchQuery(pending);
+    runSearch(pending);
+  }, [runSearch, setPendingSearch]);
 
-    updateLayerData("transportation_layer", stations);
-    updateLayerData("berlin_construction_layer", constructions?.nearby ?? []);
+  const handleSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    runSearch(searchQuery);
   };
 
   return (

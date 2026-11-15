@@ -1,0 +1,556 @@
+/* Overview landing page (ADR 0004). Matches the dashboard's light theme and brand blue. */
+.overview {
+  --ov-brand: #004687;
+  --ov-brand-dark: #14172e;
+  --ov-ink: #1f2430;
+  --ov-ink-2: #545a66;
+  --ov-muted: #7a7f89;
+  --ov-surface: #ffffff;
+  --ov-bg: rgb(235, 236, 238);
+  --ov-border: #dcdde1;
+  --ov-radius: 14px;
+
+  align-self: stretch;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 20px 24px 40px;
+  color: var(--ov-ink);
+  background: var(--ov-bg);
+  text-align: left;
+}
+
+.overview *,
+.overview *::before,
+.overview *::after {
+  box-sizing: border-box;
+}
+
+.overview h1,
+.overview h2,
+.overview h3,
+.overview p {
+  margin: 0;
+}
+
+.overview h2 {
+  font-size: 1.25rem;
+  line-height: 1.3;
+  color: var(--ov-ink);
+}
+
+.overview h3 {
+  font-size: 1.05rem;
+  color: var(--ov-ink);
+}
+
+.ovMuted {
+  color: var(--ov-muted);
+}
+
+.ovEyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ov-brand);
+}
+
+.ovEyebrowLight {
+  color: #b9d3f3;
+}
+
+/* ---------- Hero ---------- */
+.ovHero {
+  padding: 36px 32px;
+  border-radius: var(--ov-radius);
+  background: linear-gradient(135deg, var(--ov-brand-dark) 0%, var(--ov-brand) 100%);
+  color: #fff;
+}
+
+.ovTitle {
+  margin-top: 6px !important;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: 1.1;
+  font-weight: 800;
+  color: #fff;
+}
+
+.ovLead {
+  margin-top: 10px !important;
+  max-width: 560px;
+  color: #dbe6f5;
+  font-size: 1.05rem;
+}
+
+.ovSearch {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 620px;
+  padding: 6px 6px 6px 16px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ov-ink-2);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.ovSearch input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+  color: var(--ov-ink);
+}
+
+.ovSearch button {
+  border-radius: 999px;
+  padding: 10px 20px;
+  background: var(--ov-brand);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+}
+
+.ovSearch button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ovSearch:focus-within {
+  outline: 3px solid #86b6ef;
+}
+
+/* ---------- Live strip ---------- */
+.ovLiveStrip {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.ovLiveLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--ov-ink-2);
+  margin-right: 4px;
+}
+
+.ovLiveDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #0ca30c;
+  box-shadow: 0 0 0 3px rgba(12, 163, 12, 0.2);
+}
+
+.ovChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--ov-surface);
+  border: 1px solid var(--ov-border);
+  color: var(--ov-brand);
+  font-size: 0.9rem;
+}
+
+.ovChipLabel {
+  color: var(--ov-ink-2);
+}
+
+.ovChipValue {
+  font-weight: 600;
+  color: var(--ov-ink);
+}
+
+.ovChipSoon {
+  background: transparent;
+  border-style: dashed;
+  color: var(--ov-muted);
+}
+
+.ovChipSoon .ovChipLabel,
+.ovChipSoon .ovChipValue {
+  color: var(--ov-muted);
+  font-weight: 400;
+}
+
+/* ---------- Sections ---------- */
+.ovSection {
+  margin-top: 28px;
+}
+
+.ovSectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ovMetricSwitch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--ov-surface);
+  border: 1px solid var(--ov-border);
+}
+
+.ovMetricSwitch button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--ov-ink-2);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.ovMetricSwitch button.active {
+  background: var(--ov-brand);
+  color: #fff;
+}
+
+.ovMetricSwitch button:disabled {
+  color: var(--ov-muted);
+  cursor: not-allowed;
+}
+
+.ovSoonTag {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--ov-bg);
+}
+
+/* ---------- District map + snapshot ---------- */
+.ovDistrictGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.ovMapCard,
+.ovSnapshotCard,
+.ovRanking,
+.ovTheme {
+  background: var(--ov-surface);
+  border: 1px solid var(--ov-border);
+  border-radius: var(--ov-radius);
+}
+
+.ovMapCard {
+  padding: 10px;
+}
+
+.ovMap {
+  position: relative;
+  height: 460px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f2f2f0;
+}
+
+.ovMap .leaflet-container {
+  background: #f2f2f0;
+  cursor: pointer;
+}
+
+/* Quiet, gray basemap so the district fills carry the color. */
+.ovMap .ovBasemap {
+  filter: grayscale(1) contrast(0.9);
+  opacity: 0.45;
+}
+
+.ovMapMessage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  color: var(--ov-muted);
+}
+
+.ovLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 10px 4px 2px;
+  font-size: 0.8rem;
+  color: var(--ov-ink-2);
+}
+
+.ovLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ovSwatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.ovSource {
+  padding: 4px 4px 2px;
+  font-size: 0.75rem;
+  color: var(--ov-muted);
+}
+
+.ovSnapshot {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ovSnapshotCard {
+  padding: 16px 18px;
+}
+
+.ovSnapshotEmpty p:last-child {
+  margin-top: 6px;
+  color: var(--ov-ink-2);
+}
+
+.ovSnapshotTitle {
+  margin-top: 2px !important;
+  font-size: 1.35rem !important;
+}
+
+.ovStats {
+  margin: 12px 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+}
+
+.ovStat dt {
+  font-size: 0.75rem;
+  color: var(--ov-muted);
+}
+
+.ovStat dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--ov-ink);
+}
+
+.ovStat dd.ovMuted {
+  font-weight: 400;
+  color: var(--ov-muted);
+}
+
+.ovRankNote {
+  margin-top: 12px !important;
+  font-size: 0.85rem;
+  color: var(--ov-ink-2);
+}
+
+.ovRanking {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  font-size: 0.875rem;
+}
+
+.ovRanking caption {
+  text-align: left;
+  padding: 0 4px 6px;
+  font-weight: 600;
+  color: var(--ov-ink-2);
+}
+
+.ovRanking th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--ov-muted);
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--ov-border);
+}
+
+.ovRanking td {
+  padding: 2px 10px;
+  border-bottom: 1px solid #f0f0f2;
+  color: var(--ov-ink);
+}
+
+.ovRanking tr:last-child td {
+  border-bottom: none;
+}
+
+.ovRanking .ovNum {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ovRanking td.ovMuted {
+  color: var(--ov-muted);
+}
+
+.ovRowSelected td {
+  background: #eaf2fd;
+}
+
+.ovRowButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.ovRowButton:hover {
+  color: var(--ov-brand);
+}
+
+.ovRowButton:focus-visible {
+  outline: 2px solid var(--ov-brand);
+  outline-offset: 2px;
+}
+
+/* ---------- Themes ---------- */
+.ovThemes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.ovTheme {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+}
+
+.ovThemeIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eaf2fd;
+  color: var(--ov-brand);
+}
+
+.ovThemeCount {
+  font-size: 0.85rem;
+  color: var(--ov-ink-2);
+}
+
+.ovThemeSoon {
+  background: transparent;
+  border-style: dashed;
+}
+
+.ovThemeSoon .ovThemeIcon {
+  background: var(--ov-surface);
+  color: var(--ov-muted);
+}
+
+.ovThemeSoon .ovThemeCount {
+  color: var(--ov-muted);
+}
+
+.ovLinkButton {
+  margin-top: auto;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  border: none;
+  background: transparent;
+  color: var(--ov-brand);
+  font-weight: 600;
+}
+
+.ovLinkButton:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Data story ---------- */
+.ovStory {
+  padding: 28px 32px;
+  border-radius: var(--ov-radius);
+  background: linear-gradient(135deg, var(--ov-brand) 0%, var(--ov-brand-dark) 100%);
+  color: #dbe6f5;
+}
+
+.ovStory h2 {
+  margin-top: 6px !important;
+  color: #fff !important;
+  font-size: 1.5rem !important;
+}
+
+.ovStory p:not(.ovEyebrow) {
+  margin-top: 10px !important;
+  max-width: 640px;
+  font-size: 1.05rem;
+}
+
+.ovStoryButton {
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 10px 20px;
+  background: #fff;
+  color: var(--ov-brand);
+  font-weight: 600;
+  border: none;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .overview {
+    padding: 16px;
+  }
+
+  .ovDistrictGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .ovMap {
+    height: 360px;
+  }
+
+  .ovHero,
+  .ovStory {
+    padding: 24px 20px;
+  }
+}
