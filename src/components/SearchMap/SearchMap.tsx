@@ -1,137 +1,98 @@
-import {useEffect, useState } from "react";
-// import ReactLeafletMap from "../ReactLeaflet.tsx/ReactLeafletMap";
+import { useEffect, useState } from "react";
 import "./searchmap.css";
 import { Search, X } from "lucide-react";
 import useUIState from "../../store/useUIStore";
 import useReactLeafletMapStore from "../../store/useReactLeafletMapStore";
-import { getBerlinConstructions, getBVGData, getOpenWeather } from "../../apiCalls/ApiCall";
-// import OpenWeather from "../OpenWeather/OpenWeather";
-import { LatLon, NearbyFeature } from "../../../server/types";
-import ReactLealfetMapTest from "../ReactLeaflet.tsx/ReactLealfetMapTest";
+import { geocodeAddress, getBerlinConstructions, getBVGData, getOpenWeather } from "../../apiCalls/ApiCall";
+import type { LatLon } from "../../types";
+import LayeredMap from "../Map/LayeredMap";
 import { formatString } from "../utils/helperFunctions";
 import useFetchedDataStore from "../../store/useFetchedDataStore";
 import ToggleLayers from "../ViewControls/ToggleLayers";
 
-
-
-
-
 const SearchMap: React.FC = () => {
-  const [formData, setFormData] = useState({searchQuery: "",});
-  const [latlon, setLatlon] = useState<LatLon[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [boundingBox, setBoundingBox] = useState<number[]>([]);
-  const {isLayersTogglerMinimized, notifications,setNotification, setIsLoading} = useUIState();
-  const {mapLayers, updateLayerData} = useReactLeafletMapStore();
-  const {setBvgData, setBerlinConstructionsData } = useFetchedDataStore();
-
-
+  const { isLayersTogglerMinimized, addNotification, setIsLoading } = useUIState();
+  const { mapLayers, updateLayerData } = useReactLeafletMapStore();
+  const { setBvgData, setBerlinConstructionsData } = useFetchedDataStore();
 
   useEffect(() => {
     // Berlin coordinates
     getOpenWeather(52.52, 13.405);
   }, []);
-  
 
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
 
-    const handleMapClick = (latlng: L.LatLng) => {
-        console.log("Clicked location:", latlng);
-      };
+    if (!searchQuery) {
+      addNotification("No search query provided");
+      return;
+    }
 
+    setIsLoading(true);
+    const data = await geocodeAddress(searchQuery);
 
-    const handleChange = (e:any) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-    
-    const handleSubmit = async (e:any) => {
-        e.preventDefault();
-        setIsLoading(true)
-    
-    
-        if (!formData.searchQuery) {
-            console.log("No search query provided");
-            const newNotification = [...notifications, {id: notifications.length++, message: `No search query provided`, timestamp: new Date()} ]
-            setNotification(newNotification)
-            setIsLoading(false)
-            return;
-          }
+    if (!data) {
+      addNotification(`Search for ${searchQuery} was not successful`);
+      setIsLoading(false);
+      return;
+    }
 
-          const res = await fetch(`http://localhost:5000/api/nominatim?address=${formData.searchQuery}`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-          });
-          
-          if (res.ok) {
-            // alert('Message sent!');
-            const data = await res.json();
-            const newLatlon = [{ latitude: data?.lat, longitude: data?.lon, display_name: data?.display_name }];
-            setLatlon(newLatlon )
-            setBoundingBox(data?.boundingbox)
-            const newNotification = [...notifications, {id: notifications.length++, message: `Search for ${formData.searchQuery} was successful`, timestamp: new Date()} ]
-            setNotification(newNotification)
-            setIsLoading(false)
-            updateLayerData('location_layer', newLatlon )
-           const newBvgData = await getBVGData(data?.lat, data?.lon, formatString(formData.searchQuery), setBvgData);
-            console.log('SearchMap BVG: ', newBvgData )
-            const stations = newBvgData?.reachable?.flatMap((r: { stations: any; }) => r.stations) || [];
-            const berlinConstructons = await  getBerlinConstructions(data?.lat, data?.lon, setBerlinConstructionsData)
-            const constructions = berlinConstructons?.nearby?.map((f: NearbyFeature) => f) || [];
+    const lat = Number(data.lat);
+    const lon = Number(data.lon);
+    const location: LatLon[] = [{ latitude: lat, longitude: lon, display_name: data.display_name }];
 
+    setBoundingBox(data.boundingbox.map(Number));
+    addNotification(`Search for ${searchQuery} was successful`);
+    setIsLoading(false);
+    updateLayerData("location_layer", location);
 
-            updateLayerData("transportation_layer", stations);
-            updateLayerData("berlin_construction_layer", constructions);
-          }
+    const bvgData = await getBVGData(lat, lon, formatString(searchQuery), setBvgData);
+    const stations = bvgData?.reachable?.flatMap((r) => r.stations) ?? [];
+    const constructions = await getBerlinConstructions(lat, lon, setBerlinConstructionsData);
 
-          if (!res.ok) {
-            const newNotification = [...notifications, {id: notifications.length++, message: `Search for ${formData.searchQuery} was not successful`, timestamp: new Date()} ]
-            setNotification(newNotification)
-            setIsLoading(false)
-          }
-      };
-
-
-    return (
-        <main className="searchMapContainer">
-        <div className="searchBar">
-            <div className="searchBarDiv">
-            <form onSubmit={handleSubmit}>
-                <input type="text" placeholder="Search for an address"name="searchQuery" value={formData.searchQuery}
-                onChange={handleChange}
-                required />
-            </form>
-            <div>
-            <Search size={28} style={{marginRight:'7px', textAlign: 'start', cursor: formData.searchQuery ? "pointer" : "not-allowed",
-               opacity: formData.searchQuery ? 1 : 0.5}} onClick={handleSubmit}/>
-            {formData.searchQuery && <X size={28} onClick={() => setFormData({ ...formData, searchQuery: "" })}/>}
-            </div>
-            </div>
-        </div> 
-        <div className={isLayersTogglerMinimized? "toggleLayerMinimzedBar" : "toggleLayerBar"}>
-           <ToggleLayers/> 
-        </div>
-        {/* <div className="weatherBar">
-           <OpenWeather/> 
-        </div> */}
-        <div className="mapContainer">
-          {/* <ReactLeafletMap coordsArray={latlon} PopComponent={MapPopComponent} boundingBox={boundingBox} zoomToLocation onMapClick={handleMapClick} /> */}
-
-          <ReactLealfetMapTest  PopComponent={MapPopComponent} boundingBox={boundingBox} zoomToLocation onMapClick={handleMapClick} layers={mapLayers} />
-        </div>
-      </main>
-    );
+    updateLayerData("transportation_layer", stations);
+    updateLayerData("berlin_construction_layer", constructions?.nearby ?? []);
   };
 
-export default SearchMap;
-
-
-
-function MapPopComponent({latitude, longitude, display_name }: {latitude?:number, longitude?:number,  display_name?:string}){
-    return (
-        <div style={{display:"flex", flexDirection:"column", width: "400px", height: "200px"}}>
-            <p style={{ width: "325px", height: "5px",}}>{display_name}</p><br />
-            <p style={{ height: "5px"}}>Latitude:{latitude}</p>
-            <p style={{ height: "5px"}}>Longitude:{longitude}</p>
-
+  return (
+    <main className="searchMapContainer">
+      <div className="searchBar">
+        <div className="searchBarDiv">
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Search for an address"
+              name="searchQuery"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              required
+            />
+          </form>
+          <div>
+            <Search
+              size={28}
+              style={{
+                marginRight: "7px",
+                textAlign: "start",
+                cursor: searchQuery ? "pointer" : "not-allowed",
+                opacity: searchQuery ? 1 : 0.5,
+              }}
+              onClick={handleSubmit}
+            />
+            {searchQuery && <X size={28} onClick={() => setSearchQuery("")} />}
+          </div>
         </div>
-    )
-}
+      </div>
+      <div className={isLayersTogglerMinimized ? "toggleLayerMinimzedBar" : "toggleLayerBar"}>
+        <ToggleLayers />
+      </div>
+      <div className="mapContainer">
+        <LayeredMap boundingBox={boundingBox} zoomToLocation layers={mapLayers} />
+      </div>
+    </main>
+  );
+};
 
+export default SearchMap;

@@ -1,11 +1,8 @@
 import { Marker, Popup } from 'react-leaflet';
 import { BusIcon, SBahnIcon, TramIcon } from './BvgIcons';
-import { BvgTransportationLayerProps } from '../../../server/types';
+import { BvgTransportationLayerProps } from '../../types';
 
   
-  // Define different icons based on transport type
- // const busIcon = new L.Icon({ iconUrl: 'icons/notification.png', iconSize: [25, 25] });
- 
   
   const BvgTransportationLayer: React.FC<BvgTransportationLayerProps> = ({ item, index }) => {
 
@@ -44,20 +41,3 @@ import { BvgTransportationLayerProps } from '../../../server/types';
   };
   
   export default BvgTransportationLayer;
-
-
-
-
-  
-
-
-
-
-
-
-
-
-  
-
-
-  

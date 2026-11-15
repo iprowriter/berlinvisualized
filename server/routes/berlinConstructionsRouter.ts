@@ -1,61 +1,31 @@
-import express from 'express';
-import axios from 'axios';
-import haversine from 'haversine-distance'; 
-
+import express, { Request, Response } from "express";
+import axios from "axios";
+import { filterNearby, type ConstructionFeature, type LonLat } from "../utils/geo.js";
+import { errorMessage } from "../utils/errors.js";
 
 const berlinConstructionsRouter = express.Router();
 
+const BASE_URL = "https://api.viz.berlin.de/daten/baustellen_sperrungen.json";
 
-// Route: 
-berlinConstructionsRouter.get('/', async (req: any, res: any) => {
-  const { lat, lon} = req.query;
+// GET /api/berlin-constructions?lat=...&lon=...
+berlinConstructionsRouter.get("/", async (req: Request, res: Response) => {
+  const { lat, lon } = req.query as { lat?: string; lon?: string };
 
-  const BASE_URL = 'https://api.viz.berlin.de/daten/baustellen_sperrungen.json';
-
-  if (!lat || !lon ) {
-    return res.status(400).json({ error: 'Missing latitude and longitude' });
+  if (!lat || !lon) {
+    res.status(400).json({ error: "Missing latitude and longitude" });
+    return;
   }
 
- const searchCoord: [number, number] = [parseFloat(lon as string), parseFloat(lat as string)];
-
+  const searchCoord: LonLat = [parseFloat(lon), parseFloat(lat)];
 
   try {
-    const response = await axios.get(BASE_URL);
-    const constructionJSON = response.data;
-
-    const nearbyConstructions = constructionJSON?.features.filter((feature: any) => {
-        const coords = extractBerlinConstructionData(feature.geometry);
-        return coords.some(coord => isConstructionNearBy(coord, searchCoord));
-    });
-    res.json({ nearby: nearbyConstructions});
-
-  } catch (error: any) {
-    console.error('Error fetching construction data:', error.message);
-    res.status(500).json({ error: 'Failed to fetch construction data' });
+    const response = await axios.get<{ features?: ConstructionFeature[] }>(BASE_URL);
+    const nearby = filterNearby(response.data?.features ?? [], searchCoord);
+    res.json({ nearby });
+  } catch (error) {
+    console.error("Error fetching construction data:", errorMessage(error));
+    res.status(500).json({ error: "Failed to fetch construction data" });
   }
 });
 
 export default berlinConstructionsRouter;
-
-
-//DBG: Helper function to find Nearby constructions using Haversine.
-const extractBerlinConstructionData = (geometry: any): [number, number][] => {
-    if (!geometry) return [];
-    if (geometry.type === 'Point') {
-        return [geometry.coordinates];
-      } else if (geometry.type === 'GeometryCollection') {
-        const coords: [number, number][] = [];
-        for (const g of geometry.geometries) {
-          if (g.type === 'Point') coords.push(g.coordinates);
-          else if (g.type === 'LineString') coords.push(...g.coordinates);
-        }
-        return coords;
-      }
-  return [];
-};
-
-
-const isConstructionNearBy = (coord1: [number, number], coord2: [number, number], maxDistanceMeters = 1000) => {
-    const dist = haversine({ lat: coord1[1], lon: coord1[0] }, { lat: coord2[1], lon: coord2[0] });
-   return dist <= maxDistanceMeters;
-};

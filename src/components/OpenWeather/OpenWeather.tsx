@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
+import { getOpenWeather } from "../../apiCalls/ApiCall";
+import type { OpenWeatherResponse } from "../../types";
 import "./openweather.css"; // Import the CSS file
 
 const OpenWeather: React.FC = () => {
-  const [weather, setWeather] = useState<any>(null);
+  const [weather, setWeather] = useState<OpenWeatherResponse | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/open-weather?lat=52.5200&lon=13.4050") // Berlin Coordinates
-      .then((res) => res.json())
-      .then((data) => setWeather(data))
-      .catch((error) => console.error("Error fetching weather data:", error));
+    // Berlin coordinates
+    getOpenWeather(52.52, 13.405).then((data) => setWeather(data ?? null));
   }, []);
 
   return (

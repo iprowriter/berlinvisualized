@@ -1,30 +1,37 @@
 import { create } from "zustand";
+import type { Notification } from "../types";
 
-// Define the state shape
 interface UIState {
-    selectedNavOption: string | null;
-    setSelectedNavOption: (option: string | null) => void;
-    notifications: { id: number, message: string, timestamp: Date }[];
-    setNotification: (notifications: { id: number, message: string, timestamp: Date }[]) => void;
-    isLoading: boolean;
-    setIsLoading: (isLoading: boolean) => void;
-    isLayersTogglerMinimized: boolean;
-    setIsLayersTogglerMinimized: (isLayersTogglerMinimized: boolean) => void;
-
+  selectedNavOption: string | null;
+  setSelectedNavOption: (option: string | null) => void;
+  notifications: Notification[];
+  setNotification: (notifications: Notification[]) => void;
+  addNotification: (message: string) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
+  isLayersTogglerMinimized: boolean;
+  setIsLayersTogglerMinimized: (isLayersTogglerMinimized: boolean) => void;
 }
 
-// Create the store
 const useUIState = create<UIState>((set) => ({
-    selectedNavOption: null,  // Initial state
-    setSelectedNavOption: (option) => set({ selectedNavOption: option }),
-    isLoading: false,
-    setIsLoading: (isLoading) => set({ isLoading: isLoading }),
+  selectedNavOption: null,
+  setSelectedNavOption: (option) => set({ selectedNavOption: option }),
 
-    notifications: [],
-    setNotification: (notification) => set({ notifications: notification }),
+  isLoading: false,
+  setIsLoading: (isLoading) => set({ isLoading }),
 
-    isLayersTogglerMinimized: false,
-    setIsLayersTogglerMinimized: (isLayersTogglerMinimized) => set({ isLayersTogglerMinimized: isLayersTogglerMinimized }),
+  notifications: [],
+  setNotification: (notifications) => set({ notifications }),
+  addNotification: (message) =>
+    set((state) => ({
+      notifications: [
+        ...state.notifications,
+        { id: (state.notifications[state.notifications.length - 1]?.id ?? 0) + 1, message, timestamp: new Date() },
+      ],
+    })),
+
+  isLayersTogglerMinimized: false,
+  setIsLayersTogglerMinimized: (isLayersTogglerMinimized) => set({ isLayersTogglerMinimized }),
 }));
 
 export default useUIState;

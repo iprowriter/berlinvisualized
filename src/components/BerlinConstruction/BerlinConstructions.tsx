@@ -1,5 +1,5 @@
 import { Marker, Popup, Polyline} from 'react-leaflet';
-import { BerlinConstructionsLayerProps } from '../../../server/types';
+import { BerlinConstructionsLayerProps } from '../../types';
 import L from 'leaflet';
 
   
@@ -16,7 +16,7 @@ import L from 'leaflet';
       }
 
 
-      const {street, direction, icon, section, severity, validity, id,} = item.properties
+      const { street, direction, icon } = item.properties
 
       const geometry = item.geometry;
         let pointCoords: [number, number] | null = null; //point coordinates
@@ -71,16 +71,3 @@ import L from 'leaflet';
 
 
 export default BerlinConstructionsLayer;
-  
-
-
-
-
-
-
-
-
-  
-
-
-  

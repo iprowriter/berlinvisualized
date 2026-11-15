@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { User, Home, BellRing, Settings, Car, MapIcon, House } from "lucide-react";
 import "./dashboardhome.css";
-import ReactLeafletMap from "../ReactLeaflet.tsx/ReactLeafletMap";
+import ReactLeafletMap from "../Map/ReactLeafletMap";
 import { berlinRent } from '../utils/berlinRent';
 import SearchMap from "../SearchMap/SearchMap";
 import useUIState from "../../store/useUIStore";
@@ -11,11 +11,6 @@ function DashboardHome() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const [selectedView, setSelectedView] = useState("map");
   const [showNotifications, setShowNotifications] = useState(false);
-
-  const handleMapClick = (latlng: L.LatLng) => {
-    console.log("Clicked location:", latlng);
-  };
-
 
   const handleViewChange = (view: string) => {
     setSelectedView(view);
@@ -88,7 +83,7 @@ function DashboardHome() {
           {selectedView === "overview" && <h1>Overview Content</h1>}
           {selectedView === "map" && <SearchMap/>} 
           {selectedView === "transports" && <h1>Transport Information</h1>}
-          {selectedView === "rents" &&  <ReactLeafletMap coordsArray={berlinRent} PopComponent={MapPopComponent}  onMapClick={handleMapClick } />}
+          {selectedView === "rents" &&  <ReactLeafletMap coordsArray={berlinRent} PopComponent={MapPopComponent} />}
         </div>
       </section>
     </main>
@@ -98,13 +93,13 @@ function DashboardHome() {
 export default DashboardHome;
 
 
-function MapPopComponent({median, average, district, url }: { median?:number, average?:number, district?:string, url?:string}){
+function MapPopComponent({ median_rent, average_rent, district, url }: { median_rent?: number; average_rent?: number; district?: string; url?: string }) {
     return (
         <div style={{display:"flex", flexDirection:"column", width: "400px", height: "400px"}}>
             <img src={url} alt={district} style={{width: "300px", height: "300px"}} />
             <strong>{district}</strong><br />
-            <p style={{ height: "5px"}}>Median Rent: €{median}/m² </p>
-            <p style={{ height: "5px"}}>Average Rent: €{average}/m²</p>
+            <p style={{ height: "5px"}}>Median Rent: €{median_rent}/m² </p>
+            <p style={{ height: "5px"}}>Average Rent: €{average_rent}/m²</p>
 
         </div>
     )
