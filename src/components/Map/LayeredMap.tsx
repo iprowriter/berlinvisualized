@@ -1,6 +1,8 @@
 import { MapContainer, TileLayer, Marker, Popup, GeoJSON, useMapEvents, Rectangle } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import "leaflet/dist/leaflet.css";
+import "react-leaflet-cluster/dist/assets/MarkerCluster.css";
+import "react-leaflet-cluster/dist/assets/MarkerCluster.Default.css";
 import L from "leaflet";
 import React from "react";
 import type { GeoJsonObject } from "geojson";
