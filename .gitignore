@@ -29,3 +29,6 @@ dist-ssr
 # Raw third-party datasets: not ours to redistribute, and too large for git.
 # Re-download them from the URLs in data/sources.json (see data/README.md).
 data/raw/
+
+# Offline basemap (OpenStreetMap data, large binary). Re-create with: npm run map:download
+data/map/

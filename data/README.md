@@ -9,7 +9,8 @@ downloaded on **2026-11-15**. All GeoJSON is WGS84 (EPSG:4326).
 data/
 ├── README.md       # this file (tracked)
 ├── sources.json    # manifest: source URL, license, record count, size and checksum per file (tracked)
-└── raw/            # the downloaded files (gitignored: third-party data, ~470 MB)
+├── raw/            # the downloaded files (gitignored: third-party data, ~470 MB)
+└── map/            # offline basemap, berlin.pmtiles (gitignored, see "Offline basemap" below)
 ```
 
 The files in `raw/` aren't ours to redistribute and are too large for git, so they're **not committed**.
@@ -132,3 +133,17 @@ The app itself should fetch these live through the backend (ADR 0002).
 | `air_quality_components.json` | `https://luftdaten.berlin.de/api/components` |
 
 Hourly readings per station: `https://luftdaten.berlin.de/api/stations/<code>/data?period=1h&timespan=custom&start=<ISO>&end=<ISO>`.
+
+## Offline basemap
+
+`map/berlin.pmtiles` is an OpenStreetMap vector basemap of Berlin (plus a small margin), extracted
+from the latest daily [Protomaps](https://docs.protomaps.com/basemaps/downloads) planet build. It lets the
+map render without calling `tile.openstreetmap.org`, whose usage policy forbids bulk downloading tiles.
+
+```bash
+brew install pmtiles     # once
+npm run map:download     # runs scripts/download-map.sh
+```
+
+The script only fetches the Berlin bounding box (`12.95,52.28,13.90,52.73`) through HTTP range requests.
+Map data © OpenStreetMap contributors (ODbL): keep that attribution visible wherever the map is shown.

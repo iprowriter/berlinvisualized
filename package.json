@@ -12,7 +12,8 @@
     "startDev": "concurrently \"npm run server\" \"npm run dev\"",
     "test": "vitest run",
     "test:server": "cd server && npm test",
-    "test:all": "npm test && npm run test:server"
+    "test:all": "npm test && npm run test:server",
+    "map:download": "bash scripts/download-map.sh"
   },
   "dependencies": {
     "concurrently": "^9.1.2",
