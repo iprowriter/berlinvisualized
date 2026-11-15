@@ -16,7 +16,11 @@ The files in `raw/` aren't ours to redistribute and are too large for git, so th
 `sources.json` records where each one came from so it can be downloaded again:
 
 - `method: "wfs" | "http" | "api"`: re-downloadable from `url` (for `api`, convert as described in `notes`).
-- `method: "manual"`: downloaded by hand from `page`. The exact file URL wasn't recorded. Fill in `url` next time you download it.
+  Every entry currently has a `url`; all were checked to resolve on 2026-11-15.
+- `method: "manual"`: reserved for files downloaded by hand from `page` without a recorded file URL. No entry uses it today; avoid adding new ones.
+- Some URLs are versioned and go stale when a new edition comes out: Statistik BB's hashed
+  `download.statistik-berlin-brandenburg.de` links and the date-stamped BNetzA register. For those,
+  `page` is where the current link is published.
 - `licenseVerified: false`: license not yet confirmed on the publisher's page. Check before shipping the layer.
 - `bytes` / `sha256`: what was downloaded on `fetchedAt`, to detect when a source has changed.
 
@@ -55,11 +59,11 @@ without one at `https://datenregister.berlin.de/api/3/action/package_search?q=..
 | File | Records | Source | License |
 | --- | --- | --- | --- |
 | `bvg_stations.geojson` | 26,679 stations (all of VBB, not only Berlin) | `v6.bvg.transport.rest/stops`, converted | ISC (API) / VBB data |
-| `nextbike_stations_snapshot.geojson` | 1,080 stations with bike counts at download time | Nextbike GBFS `nextbike_bn` | Nextbike open data |
-| `traffic_accidents_2025_berlin.csv` | 13,280 accidents with injuries (`ULAND=11`; lon/lat in `XGCSWGS84`/`YGCSWGS84`, comma decimals) | Unfallatlas (opengeodata.nrw.de) | dl-de-by-2.0 |
-| `traffic_accidents_schema.ini` | Column types for the above | Unfallatlas | |
-| `ev_charging_stations_bnetza_berlin_2026-11-12.csv` | 5,104 charging sites in Berlin | Bundesnetzagentur Ladesäulenregister, filtered to Berlin | CC BY 4.0 |
-| `ev_charging_stations.xlsx` | Berlin's own (older) charging list | daten.berlin.de | cc-by-sa |
+| `nextbike_stations_snapshot.geojson` | 1,080 stations with bike counts at download time | Nextbike GBFS `nextbike_bn`: `station_information` joined with `station_status` | Nextbike open data |
+| `traffic_accidents_2025_berlin.csv` | 13,280 accidents with injuries (`ULAND=11`; lon/lat in `XGCSWGS84`/`YGCSWGS84`, comma decimals) | Unfallatlas: `opengeodata.nrw.de/.../Unfallorte2025_EPSG25832_CSV.zip`, filtered to Berlin | dl-de-by-2.0 |
+| `traffic_accidents_schema.ini` | Column types for the above | `csv/schema.ini` from the same zip | |
+| `ev_charging_stations_bnetza_berlin_2026-11-12.csv` | 5,104 charging sites in Berlin | Bundesnetzagentur Ladesäulenregister (`data.bundesnetzagentur.de`, date-stamped CSV), filtered to Berlin | CC BY 4.0 |
+| `ev_charging_stations.xlsx` | Berlin's own (older) charging list | berlin.de (`emobility__ladesaeulen_.xlsx`, via daten.berlin.de) | cc-by-sa |
 | `bike_counters_hourly.xlsx` | Hourly counts per bike counter | berlin.de (SenUMVK Fahrradzählstellen) | dl-de-zero-2.0 |
 
 ## environment/
@@ -80,12 +84,12 @@ Not downloaded: **noise** (strategic noise map 2022 has 3.8M polygons). Use it a
 
 | File | Records | Source | License |
 | --- | --- | --- | --- |
-| `rent_index_table_2026.pdf` | Official Mietspiegel 2026 €/m² table | mietspiegel.berlin.de | |
-| `rent_index_mietspiegel_2026.pdf`, `rent_index_documentation_2026.pdf`, `rent_index_residential_location_map_2026.pdf` | Full Mietspiegel, method documentation, location map | mietspiegel.berlin.de | |
+| `rent_index_table_2026.pdf` | Official Mietspiegel 2026 €/m² table | `mietspiegel.berlin.de/wp-content/uploads/2026/05/` | |
+| `rent_index_mietspiegel_2026.pdf`, `rent_index_documentation_2026.pdf`, `rent_index_residential_location_map_2026.pdf` | Full Mietspiegel, method documentation, location map | `mietspiegel.berlin.de/wp-content/uploads/2026/{05,07}/` | |
 | `rent_index_residential_location_2026.geojson` | 400,505 addresses with location class (`wol`: einfach/mittel/gut) | Geoportal WFS `wohnlagenadr2026` | dl-de-zero-2.0 |
 | `land_values_2025.geojson` | 1,619 land value zones (Bodenrichtwerte 01.01.2025) | Geoportal WFS `brw2025:brw_2025_vector` | dl-de-zero-2.0 |
 | `schools.geojson` | 929 schools | Geoportal WFS `schulen:schulen` | dl-de-zero-2.0 |
-| `daycare_centers_2025-11.xlsx` | Kita list Nov 2025 (addresses, no coordinates) | daten.berlin.de "Kitas in Berlin" | cc-by |
+| `daycare_centers_2025-11.xlsx` | Kita list Nov 2025 (addresses, no coordinates) | berlin.de `kitaliste-nov-2025.xlsx` (daten.berlin.de "Kitas in Berlin") | cc-by |
 | `parks.geojson` | 2,563 green spaces | Geoportal WFS `gruenanlagen:gruenanlagen` | dl-de-zero-2.0 |
 | `playgrounds.geojson` | 1,886 playgrounds | Geoportal WFS `gruenanlagen:spielplaetze` | dl-de-zero-2.0 |
 | `public_toilets.geojson` / `public_toilets.xlsx` | 525 toilets | Geoportal WFS `toiletten:toiletten` / berlin.de | dl-de-zero-2.0 / cc-by |
@@ -94,14 +98,14 @@ Not downloaded: **noise** (strategic noise map 2022 has 3.8M polygons). Use it a
 
 | File | Records | Source | License |
 | --- | --- | --- | --- |
-| `population_lor_2026-06-30.xlsx` / `.pdf` | Population per LOR planning area, 30.06.2026 (report A I 16) | Statistik Berlin-Brandenburg | CC BY 3.0 DE |
-| `population_districts_2026-06-30.xlsx` / `.pdf` | Population by district, age, nationality, 30.06.2026 (report A I 5) | Statistik Berlin-Brandenburg | CC BY 3.0 DE |
+| `population_lor_2026-06-30.xlsx` / `.pdf` | Population per LOR planning area, 30.06.2026 (report A I 16) | Statistik Berlin-Brandenburg, report page `a-i-16-hj` | CC BY 3.0 DE |
+| `population_districts_2026-06-30.xlsx` / `.pdf` | Population by district, age, nationality, 30.06.2026 (report A I 5) | Statistik Berlin-Brandenburg, report page `a-i-5-hj` | CC BY 3.0 DE |
 | `population_register_methodology.pdf` | Methodology of the population register statistics | Statistik Berlin-Brandenburg | |
 | `social_monitoring_2023_indices_lor.geojson` | 542 planning areas with social status indices (MSS 2023) | Geoportal WFS `mss_2023:mss2023_indizes_542` | dl-de-zero-2.0 |
-| `election_berlin_2026_results_by_polling_district.xlsx` | Abgeordnetenhaus + BVV 2026 results per polling district | wahlen-berlin.de | |
-| `election_berlin_2026_report.pdf` | Official statistical report on the 2026 election | wahlen-berlin.de | |
-| `crime_atlas_2016-2025.xlsx` | Crime counts per district/district region, 2016–2025 | Polizei Berlin Kriminalitätsatlas | cc-by-sa |
-| `christmas_markets.geojson` | 47 Christmas markets | berlin.de Weihnachtsmärkte (simple_search) | cc-by |
+| `election_berlin_2026_results_by_polling_district.xlsx` | Abgeordnetenhaus + BVV 2026 results per polling district | wahlen-berlin.de `BE2026/Afspraes/AGH/downloads.html` | |
+| `election_berlin_2026_report.pdf` | Official statistical report on the 2026 election | wahlen-berlin.de `BE2026/Afspraes/AGH/downloads.html` | |
+| `crime_atlas_2016-2025.xlsx` | Crime counts per district/district region, 2016–2025 | Polizei Berlin Kriminalitätsatlas (`berlin.de/polizei/.../fallzahlen_hz-2016-2025.xlsx`) | cc-by-sa |
+| `christmas_markets.geojson` | 47 Christmas markets | berlin.de Weihnachtsmärkte simple_search, GeoJSON export | cc-by |
 
 ## history/
 
@@ -112,7 +116,7 @@ Not downloaded: **noise** (strategic noise map 2022 has 3.8M polygons). Use it a
 | `berlin_wall_political_border.geojson` | 34 lines: political border | `berlinermauer:c_politischegrenze` | dl-de-zero-2.0 |
 | `berlin_wall_border_strip.geojson` | 67 polygons: border strip | `berlinermauer:d_grenzstreifen` | dl-de-zero-2.0 |
 | `listed_monuments.geojson` | 9,578 listed monuments | Geoportal WFS `denkmale:denkmale` | dl-de-zero-2.0 |
-| `stolpersteine.csv` | 11,094 Stolpersteine with coordinates and biography links | stolpersteine-berlin.de | cc-by |
+| `stolpersteine.csv` | 11,094 Stolpersteine with coordinates and biography links | `stolpersteine-berlin.de/de/stolpersteine-finden/download` | cc-by |
 
 ## snapshots/
 
